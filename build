@@ -17,13 +17,16 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with wkhtmltopdf. If not, see <http://www.gnu.org/licenses/#LGPL>.
 
-import argparse, os, sys, yaml
+import argparse, multiprocessing, os, sys, yaml
+
+def message(msg):
+    sys.stdout.write(msg+'\n')
+    sys.stdout.flush()
 
 def shell(cmd):
     ret = os.system(cmd)
     if ret:
-        sys.stdout.write('%s\ncommand failed: exit code %d' % (cmd, ret))
-        sys.stdout.flush()
+        message('%s\ncommand failed: exit code %d' % (cmd, ret))
         sys.exit(1)
 
 def docker_images(config, push):
@@ -37,6 +40,38 @@ def docker_images(config, push):
         for name in config['docker-targets']:
             shell('docker push %s%s' % (prefix, name))
 
+def compile_docker(config, target, src_dir, tgt_dir):
+    if target not in config['docker-targets']:
+        message('Unknown target: %s' % target)
+        sys.exit(1)
+
+    if not os.path.exists(os.path.join(src_dir, 'wkhtmltopdf.pro')):
+        message('Not wkhtmltopdf source directory: %s' % src_dir)
+        sys.exit(1)
+
+    if not os.path.exists(os.path.join(src_dir, 'qt', 'configure')):
+        message('Qt not present in wkhtmltopdf source: %s' %  src_dir)
+        sys.exit(1)
+
+    shell('mkdir -p %(tgt)s/app %(tgt)s/qt' % dict(tgt=tgt_dir))
+
+    dimage = '--user %d:%d %s%s' % (os.getuid(), os.getgid(), config['docker-prefix'], target)
+    def dshell(wd, cmd):
+        shell('docker run -v%s:/src -v%s:/tgt -w%s %s %s' % (
+            os.path.abspath(src_dir), os.path.abspath(tgt_dir), wd, dimage, cmd))
+
+    if not os.path.exists(os.path.join(tgt_dir, 'qt_configured')):
+        dshell('/tgt/qt', '/src/qt/configure %s %s --prefix=/tgt/qt' % (
+            config['qt-config']['common'].strip(),
+            config['qt-config']['docker'].strip()))
+        shell('touch %s/qt_configured' % tgt_dir)
+
+    dshell('/tgt/qt', 'make -j%d' % multiprocessing.cpu_count())
+
+    shell('rm -fr %s/app/bin %s/wkhtmltox' % (tgt_dir, tgt_dir))
+    dshell('/tgt/app', '/tgt/qt/bin/qmake /src/wkhtmltopdf.pro')
+    dshell('/tgt/app', 'make install INSTALL_ROOT=/tgt/wkhtmltox')
+
 def main():
     parser = argparse.ArgumentParser(prog='build')
     sub    = parser.add_subparsers(title='TARGETS', metavar='<target>')
@@ -44,6 +79,12 @@ def main():
     docker = sub.add_parser('docker-images', help='rebuild all docker images')
     docker.add_argument('--push', action='store_true', default=False, help='push to DockerHub after building')
     docker.set_defaults(func=docker_images)
+
+    compile = sub.add_parser('compile-docker', help='compile source via Docker image')
+    compile.add_argument('target',  help='target to use for compilation')
+    compile.add_argument('src_dir', help='directory which has wkhtmltopdf source code')
+    compile.add_argument('tgt_dir', help='output directory')
+    compile.set_defaults(func=compile_docker)
 
     args = vars(parser.parse_args(sys.argv[1:]))
     func = args.pop('func')
