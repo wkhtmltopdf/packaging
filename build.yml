@@ -1,0 +1,62 @@
+docker-prefix: wkhtmltopdf/packaging:0.12-
+
+docker-targets:
+  stretch_64:
+    source: provision/Dockerfile.debian
+    image:  debian:stretch
+    args:
+      ssl:  libssl1.0-dev
+
+  stretch_32:
+    source: provision/Dockerfile.debian
+    image:  i386/debian:stretch
+    args:
+      ssl:  libssl1.0-dev
+
+  jessie_64:
+    source: provision/Dockerfile.debian
+    image:  debian:jessie
+
+  jessie_32:
+    source: provision/Dockerfile.debian
+    image:  i386/debian:jessie
+
+  xenial_64:
+    source: provision/Dockerfile.debian
+    image:  ubuntu:xenial
+    args:
+      jpeg: libjpeg-turbo8-dev
+
+  xenial_32:
+    source: provision/Dockerfile.debian
+    image:  i386/ubuntu:xenial
+    args:
+      jpeg: libjpeg-turbo8-dev
+
+  trusty_64:
+    source: provision/Dockerfile.debian
+    image:  ubuntu:trusty
+    args:
+      jpeg: libjpeg-turbo8-dev
+
+  trusty_32:
+    source: provision/Dockerfile.debian
+    image:  i386/ubuntu:trusty
+    args:
+      jpeg: libjpeg-turbo8-dev
+
+  centos7_64:
+    source: provision/Dockerfile.centos64
+    image:  centos:7
+
+  centos7_32:
+    source: provision/Dockerfile.centos32
+    image:  i386/centos:7
+
+  centos6_64:
+    source: provision/Dockerfile.centos64
+    image:  centos:6
+
+  centos6_32:
+    source: provision/Dockerfile.centos32
+    image:  i386/centos:6

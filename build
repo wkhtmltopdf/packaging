@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+#
+# Copyright 2018 wkhtmltopdf authors
+#
+# This file is part of wkhtmltopdf.
+#
+# wkhtmltopdf is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# wkhtmltopdf is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with wkhtmltopdf. If not, see <http://www.gnu.org/licenses/#LGPL>.
+
+import argparse, os, sys, yaml
+
+def shell(cmd):
+    ret = os.system(cmd)
+    if ret:
+        sys.stdout.write('%s\ncommand failed: exit code %d' % (cmd, ret))
+        sys.stdout.flush()
+        sys.exit(1)
+
+def docker_images(config, push):
+    prefix = config['docker-prefix']
+    for name, params in config['docker-targets'].items():
+        args = ' '.join('--build-arg %s=%s' % a for a in params['args'].items()) if 'args' in params else ''
+        shell('docker build -f %(source)s --build-arg image=%(image)s %(args)s -t %(prefix)s%(name)s .' % dict(params,
+                args=args, prefix=prefix, name=name))
+    if push:
+        shell('docker login')
+        for name in config['docker-targets']:
+            shell('docker push %s%s' % (prefix, name))
+
+def main():
+    parser = argparse.ArgumentParser(prog='build')
+    sub    = parser.add_subparsers(title='TARGETS', metavar='<target>')
+
+    docker = sub.add_parser('docker-images', help='rebuild all docker images')
+    docker.add_argument('--push', action='store_true', default=False, help='push to DockerHub after building')
+    docker.set_defaults(func=docker_images)
+
+    args = vars(parser.parse_args(sys.argv[1:]))
+    func = args.pop('func')
+    bdir = os.path.dirname(__file__)
+    with open(os.path.join(bdir, 'build.yml'), 'r') as f:
+        os.chdir(bdir)
+        func(yaml.load(f.read()), **args)
+
+if __name__ == '__main__':
+    main()
