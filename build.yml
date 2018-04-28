@@ -6,60 +6,266 @@ docker-targets:
     image:  debian:stretch
     args:
       ssl:  libssl1.0-dev
+    output: deb
+    depend: >
+      ca-certificates
+      fontconfig
+      libc6
+      libfreetype6
+      libjpeg62-turbo
+      libpng16-16
+      libssl1.0.2
+      libstdc++6
+      libx11-6
+      libxcb1
+      libxext6
+      libxrender1
+      xfonts-75dpi
+      xfonts-base
+      zlib1g
 
   stretch_32:
     source: provision/Dockerfile.debian
     image:  i386/debian:stretch
+    arch:   i386
     args:
       ssl:  libssl1.0-dev
+    output: deb
+    depend: >
+      ca-certificates
+      fontconfig
+      libc6
+      libfreetype6
+      libjpeg62-turbo
+      libpng16-16
+      libssl1.0.2
+      libstdc++6
+      libx11-6
+      libxcb1
+      libxext6
+      libxrender1
+      xfonts-75dpi
+      xfonts-base
+      zlib1g
 
   jessie_64:
     source: provision/Dockerfile.debian
     image:  debian:jessie
+    output: deb
+    depend: >
+      ca-certificates
+      fontconfig
+      libc6
+      libfreetype6
+      libjpeg62-turbo
+      libpng12-0
+      libssl1.0.0
+      libstdc++6
+      libx11-6
+      libxcb1
+      libxext6
+      libxrender1
+      xfonts-75dpi
+      xfonts-base
+      zlib1g
 
   jessie_32:
     source: provision/Dockerfile.debian
     image:  i386/debian:jessie
+    arch:   i386
+    output: deb
+    depend: >
+      ca-certificates
+      fontconfig
+      libc6
+      libfreetype6
+      libjpeg62-turbo
+      libpng12-0
+      libssl1.0.0
+      libstdc++6
+      libx11-6
+      libxcb1
+      libxext6
+      libxrender1
+      xfonts-75dpi
+      xfonts-base
+      zlib1g
 
   xenial_64:
     source: provision/Dockerfile.debian
     image:  ubuntu:xenial
     args:
       jpeg: libjpeg-turbo8-dev
+    output: deb
+    depend: >
+      ca-certificates
+      fontconfig
+      libc6
+      libfreetype6
+      libjpeg-turbo8
+      libpng12-0
+      libssl1.0.0
+      libstdc++6
+      libx11-6
+      libxcb1
+      libxext6
+      libxrender1
+      xfonts-75dpi
+      xfonts-base
+      zlib1g
 
   xenial_32:
     source: provision/Dockerfile.debian
     image:  i386/ubuntu:xenial
+    arch:   i386
     args:
       jpeg: libjpeg-turbo8-dev
+    output: deb
+    depend: >
+      ca-certificates
+      fontconfig
+      libc6
+      libfreetype6
+      libjpeg-turbo8
+      libpng12-0
+      libssl1.0.0
+      libstdc++6
+      libx11-6
+      libxcb1
+      libxext6
+      libxrender1
+      xfonts-75dpi
+      xfonts-base
+      zlib1g
 
   trusty_64:
     source: provision/Dockerfile.debian
     image:  ubuntu:trusty
     args:
       jpeg: libjpeg-turbo8-dev
+    output: deb
+    depend: >
+      ca-certificates
+      fontconfig
+      libc6
+      libfreetype6
+      libjpeg-turbo8
+      libpng12-0
+      libssl1.0.0
+      libstdc++6
+      libx11-6
+      libxcb1
+      libxext6
+      libxrender1
+      xfonts-75dpi
+      xfonts-base
+      zlib1g
 
   trusty_32:
     source: provision/Dockerfile.debian
     image:  i386/ubuntu:trusty
+    arch:   i386
     args:
       jpeg: libjpeg-turbo8-dev
+    output: deb
+    depend: >
+      ca-certificates
+      fontconfig
+      libc6
+      libfreetype6
+      libjpeg-turbo8
+      libpng12-0
+      libssl1.0.0
+      libstdc++6
+      libx11-6
+      libxcb1
+      libxext6
+      libxrender1
+      xfonts-75dpi
+      xfonts-base
+      zlib1g
 
   centos7_64:
     source: provision/Dockerfile.centos64
     image:  centos:7
+    output: rpm
+    depend: >
+      ca-certificates
+      fontconfig
+      freetype
+      glibc
+      libjpeg
+      libpng
+      libstdc++
+      libX11
+      libXext
+      libXrender
+      openssl
+      xorg-x11-fonts-75dpi
+      xorg-x11-fonts-Type1
+      zlib
 
   centos7_32:
     source: provision/Dockerfile.centos32
     image:  i386/centos:7
+    arch:   i686
+    output: rpm
+    depend: >
+      ca-certificates
+      fontconfig
+      freetype
+      glibc
+      libjpeg
+      libpng
+      libstdc++
+      libX11
+      libXext
+      libXrender
+      openssl
+      xorg-x11-fonts-75dpi
+      xorg-x11-fonts-Type1
+      zlib
 
   centos6_64:
     source: provision/Dockerfile.centos64
     image:  centos:6
+    output: rpm
+    depend: >
+      ca-certificates
+      fontconfig
+      freetype
+      glibc
+      libjpeg
+      libpng
+      libstdc++
+      libX11
+      libXext
+      libXrender
+      openssl
+      xorg-x11-fonts-75dpi
+      xorg-x11-fonts-Type1
+      zlib
 
   centos6_32:
     source: provision/Dockerfile.centos32
     image:  i386/centos:6
+    arch:   i686
+    output: rpm
+    depend: >
+      ca-certificates
+      fontconfig
+      freetype
+      glibc
+      libjpeg
+      libpng
+      libstdc++
+      libX11
+      libXext
+      libXrender
+      openssl
+      xorg-x11-fonts-75dpi
+      xorg-x11-fonts-Type1
+      zlib
 
 qt-config:
   common: >
@@ -138,3 +344,14 @@ qt-config:
     -no-sse4.2
     -no-avx
     -no-neon
+
+fpm-image:      tenzer/fpm
+fpm-params:
+  name:         wkhtmltox
+  description:  convert HTML to PDF and various image formats using QtWebkit
+  license:      LGPLv3
+  vendor:       wkhtmltopdf
+  maintainer:   Ashish Kulkarni <kulkarni.ashish@gmail.com>
+  url:          https://wkhtmltopdf.org/
+  prefix:       /usr/local
+  category:     utils
