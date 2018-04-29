@@ -123,6 +123,10 @@ def package_docker(config, target, src_dir, iteration):
 
     shell('rm -fr %s' % tgt_dir)
 
+def release_docker(config, src_dir, iteration):
+    for target in config['docker-targets']:
+        package_docker(config, target, src_dir, iteration)
+
 def main():
     parser = argparse.ArgumentParser(prog='build')
     sub    = parser.add_subparsers(title='TARGETS', metavar='<target>')
@@ -142,6 +146,11 @@ def main():
     package.add_argument('src_dir', help='directory which has wkhtmltopdf source code')
     package.add_argument('--iteration', default='1', help='iteration for release builds')
     package.set_defaults(func=package_docker)
+
+    release = sub.add_parser('release-docker', help='create packages for all Docker targets')
+    release.add_argument('src_dir', help='directory which has wkhtmltopdf source code')
+    release.add_argument('--iteration', default='1', help='iteration for release builds')
+    release.set_defaults(func=release_docker)
 
     args = vars(parser.parse_args(sys.argv[1:]))
     func = args.pop('func')
