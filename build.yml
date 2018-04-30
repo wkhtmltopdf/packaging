@@ -91,6 +91,55 @@ docker-targets:
       xfonts-base
       zlib1g
 
+  bionic_64:
+    source: provision/Dockerfile.debian
+    image:  ubuntu:bionic
+    args:
+      ssl:  libssl1.0-dev
+      jpeg: libjpeg-turbo8-dev
+    output: deb
+    depend: >
+      ca-certificates
+      fontconfig
+      libc6
+      libfreetype6
+      libjpeg-turbo8
+      libpng16-16
+      libssl1.0.0
+      libstdc++6
+      libx11-6
+      libxcb1
+      libxext6
+      libxrender1
+      xfonts-75dpi
+      xfonts-base
+      zlib1g
+
+  bionic_32:
+    source: provision/Dockerfile.debian
+    image:  i386/ubuntu:bionic
+    arch:   i386
+    args:
+      ssl:  libssl1.0-dev
+      jpeg: libjpeg-turbo8-dev
+    output: deb
+    depend: >
+      ca-certificates
+      fontconfig
+      libc6
+      libfreetype6
+      libjpeg-turbo8
+      libpng16-16
+      libssl1.0.0
+      libstdc++6
+      libx11-6
+      libxcb1
+      libxext6
+      libxrender1
+      xfonts-75dpi
+      xfonts-base
+      zlib1g
+
   xenial_64:
     source: provision/Dockerfile.debian
     image:  ubuntu:xenial
