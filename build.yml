@@ -1,9 +1,10 @@
-docker-prefix: wkhtmltopdf/packaging:0.12-
+docker-prefix: wkhtmltopdf/packaging:0.12_
 
 docker-targets:
-  stretch_64:
+  stretch-amd64:
     source: provision/Dockerfile.debian
     image:  debian:stretch
+    arch:   amd64
     args:
       ssl:  libssl1.0-dev
     output: deb
@@ -24,7 +25,7 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  stretch_32:
+  stretch-i386:
     source: provision/Dockerfile.debian
     image:  i386/debian:stretch
     arch:   i386
@@ -48,9 +49,10 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  jessie_64:
+  jessie-amd64:
     source: provision/Dockerfile.debian
     image:  debian:jessie
+    arch:   amd64
     output: deb
     depend: >
       ca-certificates
@@ -69,7 +71,7 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  jessie_32:
+  jessie-i386:
     source: provision/Dockerfile.debian
     image:  i386/debian:jessie
     arch:   i386
@@ -91,9 +93,10 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  bionic_64:
+  bionic-amd64:
     source: provision/Dockerfile.debian
     image:  ubuntu:bionic
+    arch:   amd64
     args:
       ssl:  libssl1.0-dev
       jpeg: libjpeg-turbo8-dev
@@ -115,7 +118,7 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  bionic_32:
+  bionic-i386:
     source: provision/Dockerfile.debian
     image:  i386/ubuntu:bionic
     arch:   i386
@@ -140,9 +143,10 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  xenial_64:
+  xenial-amd64:
     source: provision/Dockerfile.debian
     image:  ubuntu:xenial
+    arch:   amd64
     args:
       jpeg: libjpeg-turbo8-dev
     output: deb
@@ -163,7 +167,7 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  xenial_32:
+  xenial-i386:
     source: provision/Dockerfile.debian
     image:  i386/ubuntu:xenial
     arch:   i386
@@ -187,9 +191,10 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  trusty_64:
+  trusty-amd64:
     source: provision/Dockerfile.debian
     image:  ubuntu:trusty
+    arch:   amd64
     args:
       jpeg: libjpeg-turbo8-dev
     output: deb
@@ -210,7 +215,7 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  trusty_32:
+  trusty-i386:
     source: provision/Dockerfile.debian
     image:  i386/ubuntu:trusty
     arch:   i386
@@ -234,9 +239,10 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  centos7_64:
+  centos7-x86_64:
     source: provision/Dockerfile.centos64
     image:  centos:7
+    arch:   x86_64
     output: rpm
     depend: >
       ca-certificates
@@ -254,7 +260,7 @@ docker-targets:
       xorg-x11-fonts-Type1
       zlib
 
-  centos7_32:
+  centos7-i686:
     source: provision/Dockerfile.centos32
     image:  i386/centos:7
     arch:   i686
@@ -275,9 +281,10 @@ docker-targets:
       xorg-x11-fonts-Type1
       zlib
 
-  centos6_64:
+  centos6-x86_64:
     source: provision/Dockerfile.centos64
     image:  centos:6
+    arch:   x86_64
     output: rpm
     depend: >
       ca-certificates
@@ -295,7 +302,7 @@ docker-targets:
       xorg-x11-fonts-Type1
       zlib
 
-  centos6_32:
+  centos6-i686:
     source: provision/Dockerfile.centos32
     image:  i386/centos:6
     arch:   i686

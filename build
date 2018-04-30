@@ -104,7 +104,7 @@ def package_docker(config, target, src_dir, iteration):
     arch    = config['docker-targets'][target].get('arch',   'native')
 
     dimage   = '-e XZ_OPT=-9 --user %d:%d %s' % (os.getuid(), os.getgid(), config['fpm-image'])
-    fversion = '--epoch 1 --version "%s" --iteration "%s~%s"' % (pkg_ver, pkg_iter, target.split('_')[0])
+    fversion = '--epoch 1 --version "%s" --iteration "%s~%s"' % (pkg_ver, pkg_iter, target.split('-')[0])
     fparams  = ' '.join('--%s "%s"' % (k, v) for k, v in config['fpm-params'].items())
     fdepend  = ' '.join('--depends "%s"' % p for p in depend.split() if p).strip()
     fpm_args = '%s -a %s -f -s dir -C %s/wkhtmltox %s %s %s' % (
