@@ -29,15 +29,21 @@ def shell(cmd):
         message('%s\ncommand failed: exit code %d' % (cmd, ret))
         sys.exit(1)
 
-def docker_images(config, push):
+def docker_images(config, images, push):
     prefix = config['docker-prefix']
-    for name, params in config['docker-targets'].items():
-        args = ' '.join('--build-arg %s=%s' % a for a in params['args'].items()) if 'args' in params else ''
-        shell('docker build -f %(source)s --build-arg image=%(image)s %(args)s -t %(prefix)s%(name)s .' % dict(params,
-                args=args, prefix=prefix, name=name))
+    target = sorted(images if len(images) else list(config['docker-targets'].keys()))
     if push:
         shell('docker login')
-        for name in config['docker-targets']:
+
+    for name in target:
+        if name not in config['docker-targets']:
+            message('Unknown target specified: %s' % name)
+            sys.exit(1)
+        params = config['docker-targets'][name]
+        args   = ' '.join('--build-arg %s=%s' % a for a in params['args'].items()) if 'args' in params else ''
+        shell('docker build -f %(source)s --build-arg image=%(image)s %(args)s -t %(prefix)s%(name)s .' % dict(params,
+                args=args, prefix=prefix, name=name))
+        if push:
             shell('docker push %s%s' % (prefix, name))
 
 def get_version(src_dir, iteration):
@@ -133,6 +139,7 @@ def main():
 
     docker = sub.add_parser('docker-images', help='rebuild all docker images')
     docker.add_argument('--push', action='store_true', default=False, help='push to DockerHub after building')
+    docker.add_argument('images', nargs='*', help='images to build')
     docker.set_defaults(func=docker_images)
 
     compile = sub.add_parser('compile-docker', help='compile source via Docker image')
