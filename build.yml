@@ -1,4 +1,5 @@
 docker-prefix: wkhtmltopdf/packaging:0.12_
+multiarch-cmd: docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
 docker-targets:
   stretch-amd64:

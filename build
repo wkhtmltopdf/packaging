@@ -19,6 +19,8 @@
 
 import argparse, datetime, multiprocessing, os, subprocess, sys, yaml
 
+NATIVE_ARCH = ('amd64', 'i386', 'x86_64', 'i686')
+
 def message(msg):
     sys.stdout.write(msg+'\n')
     sys.stdout.flush()
@@ -102,12 +104,15 @@ def compile_docker(config, target, src_dir, tgt_dir):
 
 def package_docker(config, target, src_dir, iteration):
     tgt_dir = os.path.join('targets', target)
+    arch    = config['docker-targets'][target]['arch']
+    if arch not in NATIVE_ARCH:
+        shell(config['multiarch-cmd'])
+
     compile_docker(config, target, src_dir, tgt_dir)
 
     pkg_ver, pkg_iter = get_version(src_dir, iteration)
     output  = config['docker-targets'][target].get('output', 'tar')
     depend  = config['docker-targets'][target].get('depend', '')
-    arch    = config['docker-targets'][target].get('arch',   'native')
 
     dimage   = '-e XZ_OPT=-9 --user %d:%d %s' % (os.getuid(), os.getgid(), config['fpm-image'])
     fversion = '--epoch 1 --version "%s" --iteration "%s~%s"' % (pkg_ver, pkg_iter, target.split('-')[0])
