@@ -1,5 +1,5 @@
-ARG  image
-FROM ${image}
+ARG  from
+FROM ${from}
 
 ARG  jpeg=libjpeg-dev
 ARG  ssl=libssl-dev

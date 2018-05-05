@@ -1,5 +1,5 @@
-ARG  image
-FROM ${image}
+ARG  from
+FROM ${from}
 
 ENV  CFLAGS=-w CXXFLAGS=-w
 

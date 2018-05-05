@@ -41,7 +41,7 @@ def docker_images(config, images, push):
             sys.exit(1)
         params = config['docker-targets'][name]
         args   = ' '.join('--build-arg %s=%s' % a for a in params['args'].items()) if 'args' in params else ''
-        shell('docker build -f %(source)s --build-arg image=%(image)s %(args)s -t %(prefix)s%(name)s .' % dict(params,
+        shell('docker build -f %(source)s %(args)s -t %(prefix)s%(name)s .' % dict(params,
                 args=args, prefix=prefix, name=name))
         if push:
             shell('docker push %s%s' % (prefix, name))

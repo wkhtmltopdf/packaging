@@ -4,11 +4,10 @@ qemu-cmd:      docker run --rm --privileged multiarch/qemu-user-static:register 
 docker-targets:
   stretch-amd64:
     source: provision/Dockerfile.debian
-    image:  debian:stretch
-    arch:   amd64
     args:
-      ssl:  libssl1.0-dev
+      from: debian:stretch
     output: deb
+    arch:   amd64
     depend: >
       ca-certificates
       fontconfig
@@ -16,7 +15,7 @@ docker-targets:
       libfreetype6
       libjpeg62-turbo
       libpng16-16
-      libssl1.0.2
+      libssl1.1
       libstdc++6
       libx11-6
       libxcb1
@@ -28,11 +27,10 @@ docker-targets:
 
   stretch-i386:
     source: provision/Dockerfile.debian
-    image:  i386/debian:stretch
-    arch:   i386
     args:
-      ssl:  libssl1.0-dev
+      from: i386/debian:stretch
     output: deb
+    arch:   i386
     depend: >
       ca-certificates
       fontconfig
@@ -40,7 +38,7 @@ docker-targets:
       libfreetype6
       libjpeg62-turbo
       libpng16-16
-      libssl1.0.2
+      libssl1.1
       libstdc++6
       libx11-6
       libxcb1
@@ -52,12 +50,11 @@ docker-targets:
 
   raspbian.stretch-armhf:
     source: provision/Dockerfile.debian
-    image:  resin/rpi-raspbian:stretch
-    arch:   armhf
     args:
-      ssl:  libssl1.0-dev
+      from: resin/rpi-raspbian:stretch
     output: deb
     qemu:   true
+    arch:   armhf
     depend: >
       ca-certificates
       fontconfig
@@ -65,7 +62,7 @@ docker-targets:
       libfreetype6
       libjpeg62-turbo
       libpng16-16
-      libssl1.0.2
+      libssl1.1
       libstdc++6
       libx11-6
       libxcb1
@@ -77,9 +74,10 @@ docker-targets:
 
   jessie-amd64:
     source: provision/Dockerfile.debian
-    image:  debian:jessie
-    arch:   amd64
+    args:
+      from: debian:jessie
     output: deb
+    arch:   amd64
     depend: >
       ca-certificates
       fontconfig
@@ -99,9 +97,10 @@ docker-targets:
 
   jessie-i386:
     source: provision/Dockerfile.debian
-    image:  i386/debian:jessie
-    arch:   i386
+    args:
+      from: i386/debian:jessie
     output: deb
+    arch:   i386
     depend: >
       ca-certificates
       fontconfig
@@ -121,12 +120,11 @@ docker-targets:
 
   bionic-amd64:
     source: provision/Dockerfile.debian
-    image:  ubuntu:bionic
-    arch:   amd64
     args:
-      ssl:  libssl1.0-dev
+      from: ubuntu:bionic
       jpeg: libjpeg-turbo8-dev
     output: deb
+    arch:   amd64
     depend: >
       ca-certificates
       fontconfig
@@ -134,7 +132,7 @@ docker-targets:
       libfreetype6
       libjpeg-turbo8
       libpng16-16
-      libssl1.0.0
+      libssl1.1
       libstdc++6
       libx11-6
       libxcb1
@@ -146,12 +144,11 @@ docker-targets:
 
   bionic-i386:
     source: provision/Dockerfile.debian
-    image:  i386/ubuntu:bionic
-    arch:   i386
     args:
-      ssl:  libssl1.0-dev
+      from: i386/ubuntu:bionic
       jpeg: libjpeg-turbo8-dev
     output: deb
+    arch:   i386
     depend: >
       ca-certificates
       fontconfig
@@ -159,7 +156,7 @@ docker-targets:
       libfreetype6
       libjpeg-turbo8
       libpng16-16
-      libssl1.0.0
+      libssl1.1
       libstdc++6
       libx11-6
       libxcb1
@@ -171,11 +168,11 @@ docker-targets:
 
   xenial-amd64:
     source: provision/Dockerfile.debian
-    image:  ubuntu:xenial
-    arch:   amd64
     args:
+      from: ubuntu:xenial
       jpeg: libjpeg-turbo8-dev
     output: deb
+    arch:   amd64
     depend: >
       ca-certificates
       fontconfig
@@ -195,11 +192,11 @@ docker-targets:
 
   xenial-i386:
     source: provision/Dockerfile.debian
-    image:  i386/ubuntu:xenial
-    arch:   i386
     args:
+      from: i386/ubuntu:xenial
       jpeg: libjpeg-turbo8-dev
     output: deb
+    arch:   i386
     depend: >
       ca-certificates
       fontconfig
@@ -219,11 +216,11 @@ docker-targets:
 
   trusty-amd64:
     source: provision/Dockerfile.debian
-    image:  ubuntu:trusty
-    arch:   amd64
     args:
+      from: ubuntu:trusty
       jpeg: libjpeg-turbo8-dev
     output: deb
+    arch:   amd64
     depend: >
       ca-certificates
       fontconfig
@@ -243,11 +240,11 @@ docker-targets:
 
   trusty-i386:
     source: provision/Dockerfile.debian
-    image:  i386/ubuntu:trusty
-    arch:   i386
     args:
+      from: i386/ubuntu:trusty
       jpeg: libjpeg-turbo8-dev
     output: deb
+    arch:   i386
     depend: >
       ca-certificates
       fontconfig
@@ -267,9 +264,10 @@ docker-targets:
 
   centos7-x86_64:
     source: provision/Dockerfile.centos64
-    image:  centos:7
-    arch:   x86_64
+    args:
+      from: centos:7
     output: rpm
+    arch:   x86_64
     depend: >
       ca-certificates
       fontconfig
@@ -288,9 +286,10 @@ docker-targets:
 
   centos7-i686:
     source: provision/Dockerfile.centos32
-    image:  i386/centos:7
-    arch:   i686
+    args:
+      from: i386/centos:7
     output: rpm
+    arch:   i686
     depend: >
       ca-certificates
       fontconfig
@@ -309,9 +308,10 @@ docker-targets:
 
   centos6-x86_64:
     source: provision/Dockerfile.centos64
-    image:  centos:6
-    arch:   x86_64
+    args:
+      from: centos:6
     output: rpm
+    arch:   x86_64
     depend: >
       ca-certificates
       fontconfig
@@ -330,9 +330,10 @@ docker-targets:
 
   centos6-i686:
     source: provision/Dockerfile.centos32
-    image:  i386/centos:6
-    arch:   i686
+    args:
+      from: i386/centos:6
     output: rpm
+    arch:   i686
     depend: >
       ca-certificates
       fontconfig
