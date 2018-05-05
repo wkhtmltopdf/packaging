@@ -350,6 +350,18 @@ docker-targets:
       xorg-x11-fonts-Type1
       zlib
 
+  mxe-cross-win32:
+    source:         provision/Dockerfile.mxe
+    qt_config:      mingw-w64
+    cross_compile:  i686-w64-mingw32.static-
+    output:         7z
+
+  mxe-cross-win64:
+    source:         provision/Dockerfile.mxe
+    qt_config:      mingw-w64
+    cross_compile:  x86_64-w64-mingw32.static-
+    output:         7z
+
 qt-config:
   common: >
     -opensource
@@ -427,6 +439,13 @@ qt-config:
     -no-sse4.2
     -no-avx
     -no-neon
+  mingw-w64: >
+    -silent
+    -openssl-linked
+    -no-reduce-exports
+    -no-rpath
+    -no-pch
+    -xplatform win32-g++-4.6
 
 fpm-image:      tenzer/fpm
 fpm-params:
