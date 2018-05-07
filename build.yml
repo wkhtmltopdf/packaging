@@ -1,5 +1,5 @@
 docker-prefix: wkhtmltopdf/packaging:0.12_
-multiarch-cmd: docker run --rm --privileged multiarch/qemu-user-static:register --reset
+qemu-cmd:      docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
 docker-targets:
   stretch-amd64:
@@ -57,6 +57,7 @@ docker-targets:
     args:
       ssl:  libssl1.0-dev
     output: deb
+    qemu:   true
     depend: >
       ca-certificates
       fontconfig

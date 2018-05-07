@@ -19,8 +19,6 @@
 
 import argparse, datetime, multiprocessing, os, subprocess, sys, yaml
 
-NATIVE_ARCH = ('amd64', 'i386', 'x86_64', 'i686')
-
 def message(msg):
     sys.stdout.write(msg+'\n')
     sys.stdout.flush()
@@ -104,16 +102,16 @@ def compile_docker(config, target, src_dir, tgt_dir):
 
 def package_docker(config, target, src_dir, iteration):
     tgt_dir = os.path.join('targets', target)
-    arch    = config['docker-targets'][target]['arch']
-    if arch not in NATIVE_ARCH:
-        shell(config['multiarch-cmd'])
 
+    if config['docker-targets'][target].get('qemu'):
+        shell(config['qemu-cmd'])
     compile_docker(config, target, src_dir, tgt_dir)
 
     pkg_ver, pkg_iter = get_version(src_dir, iteration)
     output  = config['docker-targets'][target].get('output', 'tar')
     depend  = config['docker-targets'][target].get('depend', '')
 
+    arch     = config['docker-targets'][target].get('arch')
     dimage   = '-e XZ_OPT=-9 --user %d:%d %s' % (os.getuid(), os.getgid(), config['fpm-image'])
     fversion = '--epoch 1 --version "%s" --iteration "%s~%s"' % (pkg_ver, pkg_iter, target.split('-')[0])
     fparams  = ' '.join('--%s "%s"' % (k, v) for k, v in config['fpm-params'].items())
@@ -137,11 +135,9 @@ def package_docker(config, target, src_dir, iteration):
 
     shell('rm -fr %s' % tgt_dir)
 
-def release_docker(config, src_dir, iteration, arch):
-    for target in config['docker-targets']:
-        native = config['docker-targets'][target]['arch'] in NATIVE_ARCH
-        if (native and arch != 'foreign') or (not native and arch != 'native'):
-            package_docker(config, target, src_dir, iteration)
+def release_docker(config, src_dir, iteration):
+    for target in sorted(config['docker-targets']):
+        package_docker(config, target, src_dir, iteration)
 
 def main():
     parser = argparse.ArgumentParser(prog='build')
@@ -167,8 +163,6 @@ def main():
     release = sub.add_parser('release-docker', help='create packages for all Docker targets')
     release.add_argument('src_dir', help='directory which has wkhtmltopdf source code')
     release.add_argument('--iteration', default='1', help='iteration for release builds')
-    release.add_argument('--arch', default='native', choices=['native', 'foreign', 'all'],
-                         help='target architectures (default: %(default)s)')
     release.set_defaults(func=release_docker)
 
     args = vars(parser.parse_args(sys.argv[1:]))
