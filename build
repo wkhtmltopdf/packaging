@@ -99,7 +99,7 @@ def compile_docker(config, target, src_dir, tgt_dir):
     dshell('/tgt/qt', 'make -j%d' % multiprocessing.cpu_count())
 
     shell('rm -fr %s/app/bin %s/wkhtmltox' % (tgt_dir, tgt_dir))
-    dshell('/tgt/app', '/tgt/qt/bin/qmake /src/wkhtmltopdf.pro')
+    dshell('/tgt/app', '/tgt/qt/bin/qmake /src/wkhtmltopdf.pro CONFIG+=silent')
     dshell('/tgt/app', 'make install INSTALL_ROOT=/tgt/wkhtmltox')
 
 def package_docker(config, target, src_dir, iteration):
