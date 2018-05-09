@@ -404,6 +404,9 @@ qt-config:
     -nomake tools
     -nomake tests
     -nomake translations
+  debug:
+    -debug
+    -webkit-debug
   docker: >
     -silent
     -xrender

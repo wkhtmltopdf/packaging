@@ -68,7 +68,7 @@ def get_version(src_dir, iteration):
 
     return (rel_ver, '0.%s.%s.%s~%s' % (commit_on, offset, rel_tag, commit[1:]))
 
-def compile_docker(config, target, src_dir, tgt_dir):
+def compile_docker(config, target, src_dir, tgt_dir, debug=False):
     if target not in config['docker-targets']:
         message('Unknown target: %s' % target)
         sys.exit(1)
@@ -91,9 +91,10 @@ def compile_docker(config, target, src_dir, tgt_dir):
 
     if not os.path.exists(os.path.join(tgt_dir, 'qt_configured')):
         qtconf = config['docker-targets'][target].get('qt_config', 'docker')
-        dshell('/tgt/qt', '/src/qt/configure %s %s --prefix=/tgt/qt %s' % (
+        dshell('/tgt/qt', '/src/qt/configure %s %s %s --prefix=/tgt/qt %s' % (
             config['qt-config']['common'].strip(),
             config['qt-config'][qtconf].strip(),
+            config['qt-config']['debug'].strip() if debug else '',
             '-device-option CROSS_COMPILE=%s' % cross if cross else ''))
         shell('touch %s/qt_configured' % tgt_dir)
 
@@ -157,6 +158,7 @@ def main():
     compile.add_argument('target',  help='target to use for compilation')
     compile.add_argument('src_dir', help='directory which has wkhtmltopdf source code')
     compile.add_argument('tgt_dir', help='output directory')
+    compile.add_argument('--debug', action='store_true', default=False, help='compile in debug mode')
     compile.set_defaults(func=compile_docker)
 
     package = sub.add_parser('package-docker', help='compile and package via Docker image')
