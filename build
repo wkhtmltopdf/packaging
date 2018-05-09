@@ -120,11 +120,14 @@ def package_docker(config, target, src_dir, iteration):
     fdepend  = ' '.join('--depends "%s"' % p for p in depend.split() if p).strip()
     fpm_args = '%s -a %s -f -s dir -C %s/wkhtmltox %s %s %s' % (
         dimage, arch, target, fversion, fparams, fdepend)
+    archive  = 'wkhtmltox-%s-%s~%s' % (pkg_ver, pkg_iter, target)
 
     if output == 'tar':
-        version = '%s-%s~%s' % (pkg_ver, pkg_iter, target)
-        shell('tar -cvf targets/wkhtmltox-%s.tar -C targets/%s wkhtmltox/' % (version, target))
-        shell('xz -fv9 targets/wkhtmltox-%s.tar' % version)
+        shell('tar -cvf targets/%s.tar -C targets/%s wkhtmltox/' % (archive, target))
+        shell('xz -fv9 targets/%s.tar' % archive)
+    elif output == '7z':
+        shell('rm -f targets/%s.7z' % archive)
+        shell('cd targets/%s && 7z a ../%s.7z -mx9 wkhtmltox/' % (target, archive))
     elif output == 'deb':
         fdeb = '-t deb --deb-compression xz --provides wkhtmltopdf --conflicts wkhtmltopdf --replaces wkhtmltopdf --deb-no-default-config-files'
         shell('docker run -v%s:/tgt -w/tgt %s %s' % (os.path.abspath('targets'), fpm_args, fdeb))
