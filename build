@@ -54,7 +54,8 @@ def get_version(src_dir, iteration):
     rel_ver, rel_tag = rel_ver.split('-', 1)
     def output(cmd):
         try:
-            return subprocess.check_output(cmd.split(' '), cwd=src_dir, stderr=subprocess.STDOUT).strip()
+            text = subprocess.check_output(cmd.split(' '), cwd=src_dir, stderr=subprocess.STDOUT).strip()
+            return text if isinstance(text, str) else text.decode('utf-8')
         except:
             return None
 
@@ -172,9 +173,10 @@ def main():
     release.add_argument('--iteration', default='1', help='iteration for release builds')
     release.set_defaults(func=release_docker)
 
-    args = vars(parser.parse_args(sys.argv[1:]))
+    cli  = sys.argv[1:] if len(sys.argv) > 1 else ['-h']
+    args = vars(parser.parse_args(cli))
     func = args.pop('func')
-    bdir = os.path.dirname(__file__)
+    bdir = os.path.dirname(os.path.abspath(__file__))
     with open(os.path.join(bdir, 'build.yml'), 'r') as f:
         os.chdir(bdir)
         func(yaml.load(f.read()), **args)
