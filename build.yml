@@ -374,6 +374,22 @@ vagrant-targets:
     qt_config:      macos-carbon
     home_in_rsync:  /Users/vagrant
 
+  msvc2015-win64:
+    vm:             windows
+    qt_config:      msvc
+    home_in_rsync:  /c/Users/vagrant
+    make:           nmake
+    msvc_version:   "14.0"
+    msvc_redist:    https://download.microsoft.com/download/6/D/F/6DF3FF94-F7F9-4F0B-838C-A328D1A7D0EE/vc_redist.x64.exe
+
+  msvc2015-win32:
+    vm:             windows
+    qt_config:      msvc
+    home_in_rsync:  /c/Users/vagrant
+    make:           nmake
+    msvc_version:   "14.0"
+    msvc_redist:    https://download.microsoft.com/download/6/D/F/6DF3FF94-F7F9-4F0B-838C-A328D1A7D0EE/vc_redist.x86.exe
+
 qt-config:
   common: >
     -opensource
@@ -481,6 +497,16 @@ qt-config:
     -no-rpath
     -cocoa
     -platform unsupported/macx-clang-libc++
+  msvc: >
+    -mp
+    -qt-style-windows
+    -no-style-cleanlooks
+    -no-style-windowsxp
+    -no-style-windowsvista
+    -no-style-plastique
+    -no-style-motif
+    -no-style-cde
+    -openssl-linked
 
 fpm-image:      tenzer/fpm
 fpm-params:

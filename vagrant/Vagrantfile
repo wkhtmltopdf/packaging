@@ -52,4 +52,26 @@ su vagrant -c 'echo "source /etc/profile">~/.bashrc'
 }
     end
 
+    config.vm.define "windows" do |cfg|
+        cfg.vm.provider "virtualbox" do |v|
+            v.cpus   = cpus
+            v.memory = mem
+        end
+        cfg.vm.box            = "mcandre/windows-amd64"
+        cfg.vm.box_version    = "0.0.1"
+        cfg.vm.communicator   = :winssh
+        cfg.winssh.insert_key = false
+
+        cfg.vm.synced_folder ".", "/cygdrive/c/vagrant", disabled: true
+        cfg.vm.provision     "shell", upload_path: "C:\\Windows\\Temp\\bootstrap.bat", inline: %{
+choco uninstall -y rsync
+cd "C:/Program Files/Git"
+curl -fsSL https://downloads.sourceforge.net/msys2/rsync-3.1.3-1-x86_64.pkg.tar.xz | tar xJ
+choco install -yr --no-progress python2 nsis vcbuildtools
+choco install -yr --no-progress cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+C:/Python27/Scripts/pip install -q conan pyyaml
+powershell Restart-Service sshd
+%}
+    end
+
 end
