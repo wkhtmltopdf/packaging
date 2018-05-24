@@ -9,4 +9,47 @@ Vagrant.configure(2) do |config|
     mem  = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i / 1024
     mem  = mem / 4 if mem > 2048
 
+    config.vm.define "macos" do |cfg|
+        cfg.vm.provider "virtualbox" do |v|
+            v.cpus   = cpus
+            v.memory = mem
+        end
+        cfg.vm.box         = "mcandre/vagrant-macos-homebrew"
+        cfg.vm.box_version = "0.0.1"
+        cfg.vm.synced_folder ".", "/vagrant", disabled: true
+        cfg.vm.provision     "shell", inline: %{
+easy_install pip
+pip install conan pyyaml --ignore-installed six
+su vagrant -c 'brew install cmake rsync'
+su vagrant -c 'echo "source /etc/profile">~/.bashrc'
+su vagrant -c 'echo "export MACOSX_DEPLOYMENT_TARGET=10.7">>~/.bashrc'
+gem install fpm --no-ri --no-rdoc
+}
+    end
+
+    config.vm.define "macos_lion" do |cfg|
+        cfg.vm.box         = "tuupola/osx-lion-10.7-xcode"
+        cfg.vm.box_version = "10.7.5.rc1"
+        cfg.vm.synced_folder ".", "/vagrant", disabled: true
+        cfg.vm.provision     "shell", inline: %{
+curl -fsSL -o /tmp/macports.pkg https://distfiles.macports.org/MacPorts/MacPorts-2.4.4-10.7-Lion.pkg
+installer -pkg /tmp/macports.pkg -target /
+/opt/local/bin/port -N install rsync py27-pip cmake
+mv /opt/local/etc/rsyncd.conf.example /opt/local/etc/rsyncd.conf
+/opt/local/bin/port select --set python python27
+/opt/local/bin/pip-2.7 install conan
+echo "/opt/local/bin">/tmp/paths
+echo "/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin">>/tmp/paths
+echo "/opt/ruby/bin">>/tmp/paths
+cat /etc/paths>>/tmp/paths
+cat /tmp/paths>/etc/paths
+rm /tmp/paths /tmp/macports.pkg
+mkdir /tmp/ruby
+curl -fsSL https://homebrew.bintray.com/bottles-portable-ruby/portable-ruby-2.3.3_2.leopard_64.bottle.tar.gz | tar x --strip=2 -C /tmp/ruby
+mv /tmp/ruby/ /opt
+/opt/ruby/bin/gem install fpm --no-ri --no-rdoc
+su vagrant -c 'echo "source /etc/profile">~/.bashrc'
+}
+    end
+
 end
