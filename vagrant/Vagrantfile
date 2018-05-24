@@ -1,0 +1,12 @@
+# -*- mode: ruby -*-
+
+Vagrant.configure(2) do |config|
+    config.vm.box_check_update = false
+
+    # Give VM 1/4 system memory & access to half of cpu cores on the host
+    cpus = `nproc`.to_i
+    cpus = cpus / 2 if cpus > 1
+    mem  = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i / 1024
+    mem  = mem / 4 if mem > 2048
+
+end

@@ -17,14 +17,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with wkhtmltopdf. If not, see <http://www.gnu.org/licenses/#LGPL>.
 
-import argparse, datetime, multiprocessing, os, subprocess, sys, yaml
+import argparse, datetime, importlib, json, multiprocessing, os, subprocess, sys, yaml
 
 def message(msg):
     sys.stdout.write(msg+'\n')
     sys.stdout.flush()
 
-def shell(cmd):
-    ret = os.system(cmd)
+def shell(cmd, cwd=None):
+    ret = subprocess.call(cmd, shell=True, cwd=cwd)
     if ret:
         message('%s\ncommand failed: exit code %d' % (cmd, ret))
         sys.exit(1)
@@ -142,6 +142,101 @@ def package_docker(config, target, src_dir, iteration):
 
     shell('rm -fr %s' % tgt_dir)
 
+def build_vagrant(config, target, src_dir, iteration, clean=False, debug=False, version=None):
+    if target not in config['vagrant-targets']:
+        message('Unknown target: %s' % target)
+        sys.exit(1)
+
+    if not os.path.exists(os.path.join(src_dir, 'wkhtmltopdf.pro')):
+        message('Not wkhtmltopdf source directory: %s' % src_dir)
+        sys.exit(1)
+
+    if not os.path.exists(os.path.join(src_dir, 'qt', 'configure')):
+        message('Qt not present in wkhtmltopdf source: %s' %  src_dir)
+        sys.exit(1)
+
+    if version == ['-', '-']:
+        version = get_version(src_dir, '0')
+
+    cfg  = config['vagrant-targets'][target]
+    vm   = cfg['vm']
+    base = '%s/%s' % (cfg['home_in_rsync'], target)
+
+    src_dir = os.path.abspath(src_dir)
+    tgt_dir = os.path.abspath('./targets' if not version else '../build')
+    if not os.path.exists(tgt_dir):
+        os.makedirs(tgt_dir)
+
+    def outside_vm():
+        cmd_args = '--version "%s" "%s"' % get_version(src_dir, iteration)
+
+        if clean:
+            shell('vagrant destroy -f %s' % vm, 'vagrant')
+            cmd_args += ' --clean'
+        if debug:
+            cmd_args += ' --debug'
+
+        shell('vagrant up %s' % vm, 'vagrant')
+        shell('vagrant ssh-config %s > .vagrant/%s_config' % (vm, vm), 'vagrant')
+
+        def rsync(flags, src, tgt):
+            shell('rsync --info=progress2 -a -e "ssh -F vagrant/.vagrant/%s_config" %s %s/ %s:%s/%s' % (vm, flags, os.path.abspath(src), vm, base, tgt))
+
+        shell('ssh -F vagrant/.vagrant/%s_config %s -- mkdir -p %s' % (vm, vm, base))
+        rsync('--delete --exclude .git',    src_dir, 'src')
+        rsync('--delete --exclude targets', '.',     'pkg')
+        shell('ssh -F vagrant/.vagrant/%s_config %s -- python %s/pkg/build vagrant %s %s ../src' % (vm, vm, target, cmd_args, target))
+        if not debug:
+            shell('scp -F vagrant/.vagrant/%s_config %s:%s/wkhtmltox*.* %s' % (vm, vm, target, tgt_dir))
+            shell('vagrant %s %s' % ('destroy -f' if clean else 'halt', vm), 'vagrant')
+
+    def _conan_paths(key, cmd_arg):
+        with open('conanbuildinfo.json', 'r') as f:
+            config = json.load(f)
+            paths  = []
+            for dependency in config['dependencies']:
+                for path in dependency[key]:
+                    if path not in paths:
+                        paths.append(path)
+        return ' '.join('%s %s' % (cmd_arg, str(path)) for path in paths)
+
+    def inside_vm():
+        os.environ['CONAN_USER_HOME'] = os.path.abspath('.')
+        c_build = 'missing' if not clean else '*'
+        c_debug = '-s build_type=Debug' if debug else ''
+        shell('conan install . -p %s --build "%s" %s' % (target, c_build, c_debug))
+
+        custom = importlib.import_module('vagrant.%s' % cfg.get('custom_build', vm))
+        custom_cfg, custom_qmk = custom.prepare_build(config, target, tgt_dir, src_dir)
+
+        shell('rm -fr app wkhtmltox ../wkhtmltox*.*', tgt_dir)
+        for d in ('qt', 'app', 'wkhtmltox'):
+            if not os.path.exists(os.path.join(tgt_dir, d)):
+                os.makedirs(os.path.join(tgt_dir, d))
+        if not os.path.exists(os.path.join(tgt_dir, 'qt_configured')):
+            shell('%s %s %s %s %s %s %s' % (
+                os.path.join(src_dir, 'qt', 'configure'),
+                config['qt-config']['common'].strip(),
+                config['qt-config'][cfg['qt_config']].strip(),
+                config['qt-config']['debug'].strip() if debug else '',
+                _conan_paths('include_paths', '-I'),
+                _conan_paths('lib_paths', '-L'),
+                custom_cfg), os.path.join(tgt_dir, 'qt'))
+            shell('touch %s/qt_configured' % tgt_dir)
+
+        make  = cfg.get('make', 'make -j%d' % multiprocessing.cpu_count())
+        qmake = os.path.join(tgt_dir, 'qt', 'bin', 'qmake')
+        shell(make, os.path.join(tgt_dir, 'qt'))
+        shell('%s %s/wkhtmltopdf.pro CONFIG+=silent %s' % (qmake, src_dir, custom_qmk), os.path.join(tgt_dir, 'app'))
+        shell(make, os.path.join(tgt_dir, 'app'))
+        if not debug:
+            custom.package_build(config, target, tgt_dir, src_dir, version)
+
+    if version:
+        inside_vm()
+    else:
+        outside_vm()
+
 def release_docker(config, src_dir, iteration):
     for target in sorted(config['docker-targets']):
         package_docker(config, target, src_dir, iteration)
@@ -172,6 +267,15 @@ def main():
     release.add_argument('src_dir', help='directory which has wkhtmltopdf source code')
     release.add_argument('--iteration', default='1', help='iteration for release builds')
     release.set_defaults(func=release_docker)
+
+    vagrant = sub.add_parser('vagrant', help='compile/package source via Vagrant VM')
+    vagrant.add_argument('target',  help='target to use for compilation')
+    vagrant.add_argument('src_dir', help='directory which has wkhtmltopdf source code')
+    vagrant.add_argument('--clean', action='store_true', default=False, help='perform clean build')
+    vagrant.add_argument('--debug', action='store_true', default=False, help='compile in debug mode')
+    vagrant.add_argument('--version', nargs=2, metavar=('VER', 'ITER'), help='version to use when packaging inside VM')
+    vagrant.add_argument('--iteration', metavar='RELITER', default='1', help='iteration for release builds')
+    vagrant.set_defaults(func=build_vagrant)
 
     cli  = sys.argv[1:] if len(sys.argv) > 1 else ['-h']
     args = vars(parser.parse_args(cli))
