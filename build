@@ -107,8 +107,10 @@ def compile_docker(config, target, src_dir, tgt_dir, debug=False):
     dshell('/tgt/app', '/tgt/qt/bin/qmake /src/wkhtmltopdf.pro CONFIG+=silent')
     dshell('/tgt/app', 'make install INSTALL_ROOT=/tgt/wkhtmltox')
 
-def package_docker(config, target, src_dir, iteration):
+def package_docker(config, target, src_dir, iteration, clean=False):
     tgt_dir = os.path.join('targets', target)
+    if clean:
+        shell('rm -fr %s' % tgt_dir)
 
     if config['docker-targets'][target].get('qemu'):
         shell(config['qemu-cmd'])
@@ -140,7 +142,8 @@ def package_docker(config, target, src_dir, iteration):
         frpm = '-t rpm --rpm-compression %s' % ('xz' if output == 'rpm' else 'bzip2')
         shell('docker run -v%s:/tgt -w/tgt %s %s' % (os.path.abspath('targets'), fpm_args, frpm))
 
-    shell('rm -fr %s' % tgt_dir)
+    if clean:
+        shell('rm -fr %s' % tgt_dir)
 
 def build_vagrant(config, target, src_dir, iteration, clean=False, debug=False, version=None):
     if target not in config['vagrant-targets']:
@@ -237,9 +240,12 @@ def build_vagrant(config, target, src_dir, iteration, clean=False, debug=False, 
     else:
         outside_vm()
 
-def release_docker(config, src_dir, iteration):
+def build_release(config, src_dir, iteration):
     for target in sorted(config['docker-targets']):
-        package_docker(config, target, src_dir, iteration)
+        package_docker(config, target, src_dir, iteration, clean=True)
+
+    for target in sorted(config['vagrant-targets']):
+        build_vagrant(config, target, src_dir, iteration, clean=True)
 
 def main():
     parser = argparse.ArgumentParser(prog='build')
@@ -260,13 +266,14 @@ def main():
     package = sub.add_parser('package-docker', help='compile and package via Docker image')
     package.add_argument('target',  help='target to use for compilation')
     package.add_argument('src_dir', help='directory which has wkhtmltopdf source code')
+    package.add_argument('--clean', action='store_true', default=False, help='perform clean build')
     package.add_argument('--iteration', default='1', help='iteration for release builds')
     package.set_defaults(func=package_docker)
 
-    release = sub.add_parser('release-docker', help='create packages for all Docker targets')
+    release = sub.add_parser('release', help='create packages for all targets')
     release.add_argument('src_dir', help='directory which has wkhtmltopdf source code')
     release.add_argument('--iteration', default='1', help='iteration for release builds')
-    release.set_defaults(func=release_docker)
+    release.set_defaults(func=build_release)
 
     vagrant = sub.add_parser('vagrant', help='compile/package source via Vagrant VM')
     vagrant.add_argument('target',  help='target to use for compilation')
