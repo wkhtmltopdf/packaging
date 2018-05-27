@@ -3,7 +3,7 @@ qemu-cmd:      docker run --rm --privileged multiarch/qemu-user-static:register 
 
 docker-targets:
   stretch-amd64:
-    source: provision/Dockerfile.debian
+    source: docker/Dockerfile.debian
     args:
       from: debian:stretch
     output: deb
@@ -26,7 +26,7 @@ docker-targets:
       zlib1g
 
   stretch-i386:
-    source: provision/Dockerfile.debian
+    source: docker/Dockerfile.debian
     args:
       from: i386/debian:stretch
     output: deb
@@ -49,7 +49,7 @@ docker-targets:
       zlib1g
 
   raspbian.stretch-armhf:
-    source: provision/Dockerfile.debian
+    source: docker/Dockerfile.debian
     args:
       from: resin/rpi-raspbian:stretch
     output: deb
@@ -73,7 +73,7 @@ docker-targets:
       zlib1g
 
   jessie-amd64:
-    source: provision/Dockerfile.debian
+    source: docker/Dockerfile.debian
     args:
       from: debian:jessie
     output: deb
@@ -96,7 +96,7 @@ docker-targets:
       zlib1g
 
   jessie-i386:
-    source: provision/Dockerfile.debian
+    source: docker/Dockerfile.debian
     args:
       from: i386/debian:jessie
     output: deb
@@ -119,7 +119,7 @@ docker-targets:
       zlib1g
 
   bionic-amd64:
-    source: provision/Dockerfile.debian
+    source: docker/Dockerfile.debian
     args:
       from: ubuntu:bionic
       jpeg: libjpeg-turbo8-dev
@@ -143,7 +143,7 @@ docker-targets:
       zlib1g
 
   bionic-i386:
-    source: provision/Dockerfile.debian
+    source: docker/Dockerfile.debian
     args:
       from: i386/ubuntu:bionic
       jpeg: libjpeg-turbo8-dev
@@ -167,7 +167,7 @@ docker-targets:
       zlib1g
 
   xenial-amd64:
-    source: provision/Dockerfile.debian
+    source: docker/Dockerfile.debian
     args:
       from: ubuntu:xenial
       jpeg: libjpeg-turbo8-dev
@@ -191,7 +191,7 @@ docker-targets:
       zlib1g
 
   xenial-i386:
-    source: provision/Dockerfile.debian
+    source: docker/Dockerfile.debian
     args:
       from: i386/ubuntu:xenial
       jpeg: libjpeg-turbo8-dev
@@ -215,7 +215,7 @@ docker-targets:
       zlib1g
 
   trusty-amd64:
-    source: provision/Dockerfile.debian
+    source: docker/Dockerfile.debian
     args:
       from: ubuntu:trusty
       jpeg: libjpeg-turbo8-dev
@@ -239,7 +239,7 @@ docker-targets:
       zlib1g
 
   trusty-i386:
-    source: provision/Dockerfile.debian
+    source: docker/Dockerfile.debian
     args:
       from: i386/ubuntu:trusty
       jpeg: libjpeg-turbo8-dev
@@ -263,7 +263,7 @@ docker-targets:
       zlib1g
 
   centos7-x86_64:
-    source: provision/Dockerfile.centos64
+    source: docker/Dockerfile.centos64
     args:
       from: centos:7
     output: rpm
@@ -285,7 +285,7 @@ docker-targets:
       zlib
 
   centos7-i686:
-    source: provision/Dockerfile.centos32
+    source: docker/Dockerfile.centos32
     args:
       from: i386/centos:7
     output: rpm
@@ -307,7 +307,7 @@ docker-targets:
       zlib
 
   centos6-x86_64:
-    source: provision/Dockerfile.centos64
+    source: docker/Dockerfile.centos64
     args:
       from: centos:6
     output: rpm
@@ -329,7 +329,7 @@ docker-targets:
       zlib
 
   centos6-i686:
-    source: provision/Dockerfile.centos32
+    source: docker/Dockerfile.centos32
     args:
       from: i386/centos:6
     output: rpm
@@ -351,13 +351,13 @@ docker-targets:
       zlib
 
   mxe-cross-win32:
-    source:         provision/Dockerfile.mxe
+    source:         docker/Dockerfile.mxe
     qt_config:      mingw-w64
     cross_compile:  i686-w64-mingw32.static-
     output:         7z
 
   mxe-cross-win64:
-    source:         provision/Dockerfile.mxe
+    source:         docker/Dockerfile.mxe
     qt_config:      mingw-w64
     cross_compile:  x86_64-w64-mingw32.static-
     output:         7z

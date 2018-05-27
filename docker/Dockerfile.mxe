@@ -21,7 +21,6 @@ RUN apt-get update && apt-get install -y -q --no-install-recommends \
     libtool-bin \
     libxml-parser-perl \
     make \
-    nsis \
     openssl \
     p7zip-full \
     patch \
