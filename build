@@ -35,6 +35,7 @@ def docker_images(config, images, push):
     if push:
         shell('docker login')
 
+    shell(config['qemu-cmd'])
     for name in target:
         if name not in config['docker-targets']:
             message('Unknown target specified: %s' % name)
