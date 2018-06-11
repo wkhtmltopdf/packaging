@@ -46,7 +46,7 @@ rm -fr $BASEDIR
     subprocess.check_call('chmod a+x extract.sh dist/uninstall-wkhtmltox', shell=True, cwd=build_dir)
 
     pkg_ver, pkg_iter = version
-    fversion = '--version "%s-%s~%s"' % (pkg_ver, pkg_iter, target)
+    fversion = '--version "%s-%s.%s"' % (pkg_ver, pkg_iter, target)
     fparams  = ' '.join('--%s "%s"' % (k, v) for k, v in config['fpm-params'].items())
     fpm_args = '-t osxpkg --osxpkg-identifier-prefix org.wkhtmltopdf -f -s dir --after-install extract.sh %s %s' % (fversion, fparams)
     subprocess.check_call('fpm %s --prefix %s -C dist . && mv wk*.pkg ..' % (fpm_args, prefix), shell=True, cwd=build_dir)

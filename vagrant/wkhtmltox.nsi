@@ -2,7 +2,7 @@
 !include "x64.nsh"
 
 Name             "wkhtmltox ${VERSION}"
-OutFile          "..\wkhtmltox-${VERSION}~${TARGET}.exe"
+OutFile          "..\wkhtmltox-${VERSION}.${TARGET}.exe"
 !if "${ARCH}" == "win64"
 InstallDir       "$PROGRAMFILES64\wkhtmltopdf"
 !else
