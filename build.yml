@@ -279,7 +279,7 @@ docker-targets:
       libX11
       libXext
       libXrender
-      openssl
+      'openssl > 1.0.1'
       xorg-x11-fonts-75dpi
       xorg-x11-fonts-Type1
       zlib
