@@ -1,5 +1,5 @@
 docker-prefix: wkhtmltopdf/packaging:0.12_
-qemu-cmd:      docker run --rm --privileged multiarch/qemu-user-static:register --reset
+qemu-cmd:      docker run --rm --privileged fkrull/qemu-user-static enable
 
 docker-targets:
   stretch-amd64:
