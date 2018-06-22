@@ -1,6 +1,20 @@
+# prefix used in determining full image name in "docker-images" and "compile-docker"
 docker-prefix: wkhtmltopdf/packaging:0.12_
+
+# command to run for enabling foreign-arch support in currently running kernel (>= 4.8)
 qemu-cmd:      docker run --rm --privileged fkrull/qemu-user-static enable
 
+# all targets supported by the docker-related commands, keys are as follows:
+#
+#   source:         Dockerfile used to build image
+#   output:         one of deb, rpm, tar or 7z
+#   args:           build-time docker args (optional)
+#   arch:           used as arch specified to fpm (for deb or rpm output)
+#   depend:         dependent packages specified to fpm (for deb or rpm output)
+#   qt_config:      override the qt configuration used for building Qt (optional)
+#   cross_compile:  use given prefix for cross-compilation (optional)
+#   qemu:           set to true if qemu emulation is required (optional)
+#
 docker-targets:
   stretch-amd64:
     source: docker/Dockerfile.debian
@@ -362,6 +376,14 @@ docker-targets:
     cross_compile:  x86_64-w64-mingw32.static-
     output:         7z
 
+# all targets supported by the vagrant command, keys are as follows:
+#
+# vm:               VM to use for building (defined in vagrant/Vagrantfile)
+# qt_config:        configuration used in compiling Qt
+# home_in_rsync:    path of home directory when connecting via rsync
+# custom_build:     custom build steps plugin (optional, default is vagrant/<vm>.py)
+# make:             make command (optional, default is make -jNUMPROC)
+#
 vagrant-targets:
   macos-cocoa:
     vm:             macos
@@ -390,6 +412,7 @@ vagrant-targets:
     msvc_version:   "14.0"
     msvc_redist:    https://download.microsoft.com/download/6/D/F/6DF3FF94-F7F9-4F0B-838C-A328D1A7D0EE/vc_redist.x86.exe
 
+# Qt configure arguments
 qt-config:
   common: >
     -opensource
@@ -508,7 +531,10 @@ qt-config:
     -no-style-cde
     -openssl-linked
 
+# docker image which provides fpm
 fpm-image:      tenzer/fpm
+
+# parameters for building linux packages via fpm (deb/rpm)
 fpm-params:
   name:         wkhtmltox
   description:  convert HTML to PDF and various image formats using QtWebkit
