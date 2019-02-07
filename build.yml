@@ -16,6 +16,12 @@ qemu-cmd:      docker run --rm --privileged fkrull/qemu-user-static enable
 #   qemu:           set to true if qemu emulation is required (optional)
 #
 docker-targets:
+  alpine:
+    source: docker/Dockerfile.alpine
+    args:
+      from: alpine:3.7
+    output: tar
+
   stretch-amd64:
     source: docker/Dockerfile.debian
     args:

@@ -1,0 +1,15 @@
+ARG  from
+FROM ${from}
+
+ENV  CFLAGS=-w CXXFLAGS=-w
+
+RUN apk add make
+RUN apk add perl
+RUN apk add g++
+RUN apk add libxext-dev
+RUN apk add libx11-dev
+RUN apk add libxrender-dev
+RUN apk add openssl-dev
+RUN apk add linux-headers
+RUN apk add libpng-dev
+RUN apk add libjpeg-turbo-dev
