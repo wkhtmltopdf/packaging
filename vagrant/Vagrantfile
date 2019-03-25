@@ -32,7 +32,7 @@ gem install fpm --no-ri --no-rdoc
         cfg.vm.box_version = "10.7.5.rc1"
         cfg.vm.synced_folder ".", "/vagrant", disabled: true
         cfg.vm.provision     "shell", inline: %{
-curl -fsSL -o /tmp/macports.pkg https://distfiles.macports.org/MacPorts/MacPorts-2.4.4-10.7-Lion.pkg
+curl -fsSL -o /tmp/macports.pkg https://distfiles.macports.org/MacPorts/MacPorts-2.5.4-10.7-Lion.pkg
 installer -pkg /tmp/macports.pkg -target /
 /opt/local/bin/port -N install rsync py27-pip cmake
 mv /opt/local/etc/rsyncd.conf.example /opt/local/etc/rsyncd.conf
@@ -45,7 +45,7 @@ cat /etc/paths>>/tmp/paths
 cat /tmp/paths>/etc/paths
 rm /tmp/paths /tmp/macports.pkg
 mkdir /tmp/ruby
-curl -fsSL https://homebrew.bintray.com/bottles-portable-ruby/portable-ruby-2.3.3_2.leopard_64.bottle.tar.gz | tar x --strip=2 -C /tmp/ruby
+/opt/local/bin/curl -fsSL https://homebrew.bintray.com/bottles-portable-ruby/portable-ruby-2.3.7.leopard_64.bottle.tar.gz | tar x --strip=2 -C /tmp/ruby
 mv /tmp/ruby/ /opt
 /opt/ruby/bin/gem install fpm --no-ri --no-rdoc
 su vagrant -c 'echo "source /etc/profile">~/.bashrc'
