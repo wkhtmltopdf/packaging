@@ -540,7 +540,7 @@ fpm-params:
   description:  convert HTML to PDF and various image formats using QtWebkit
   license:      LGPLv3
   vendor:       wkhtmltopdf
-  maintainer:   Ashish Kulkarni <kulkarni.ashish@gmail.com>
+  maintainer:   Ashish Kulkarni <ashish@kulkarni.dev>
   url:          https://wkhtmltopdf.org/
   prefix:       /usr/local
   category:     utils
