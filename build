@@ -48,7 +48,7 @@ def docker_images(config, images, push):
             shell('docker push %s%s' % (prefix, name))
 
 def get_version(src_dir, iteration):
-    rel_ver = open(os.path.join(src_dir, 'VERSION'), 'r').read()
+    rel_ver = open(os.path.join(src_dir, 'VERSION'), 'r').read().strip()
     if '-' not in rel_ver:
         return (rel_ver, iteration)
 
