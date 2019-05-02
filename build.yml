@@ -532,7 +532,7 @@ qt-config:
     -openssl-linked
 
 # docker image which provides fpm
-fpm-image:      tenzer/fpm
+fpm-image:      wkhtmltopdf/fpm:20190502
 
 # parameters for building linux packages via fpm (deb/rpm)
 fpm-params:
