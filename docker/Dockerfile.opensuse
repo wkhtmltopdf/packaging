@@ -1,0 +1,22 @@
+ARG  from
+FROM ${from}
+
+ENV  CFLAGS=-w CXXFLAGS=-w
+
+RUN zypper install -y \
+    gzip \
+    diffutils \
+    fontconfig-devel \
+    freetype2-devel \
+    gcc \
+    gcc-c++ \
+    libX11-devel \
+    libXext-devel \
+    libXrender-devel \
+    libjpeg8-devel \
+    libpng16-compat-devel \
+    make \
+    libopenssl-devel \
+    perl \
+    zlib-devel \
+    && zypper clean --all
