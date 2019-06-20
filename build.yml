@@ -364,6 +364,27 @@ docker-targets:
       xorg-x11-fonts-Type1
       zlib
 
+  openSUSE_Leap_15-x86_64:
+    source: docker/Dockerfile.openSUSE_Leap_64
+    args:
+      from: opensuse/leap:15.0
+    output: rpm
+    arch:   x86_64
+    depend: >
+      ca-certificates
+      fontconfig
+      freetype
+      glibc
+      libjpeg8
+      libpng16
+      libstdc++
+      libX11
+      libXext
+      libXrender
+      openssl
+      xorg-x11-fonts
+      zlib
+
   mxe-cross-win32:
     source:         docker/Dockerfile.mxe
     qt_config:      mingw-w64
