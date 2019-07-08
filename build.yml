@@ -376,11 +376,11 @@ docker-targets:
       freetype
       glibc
       libjpeg8
-      libpng16
-      libstdc++
-      libX11
-      libXext
-      libXrender
+      libpng16-16
+      libstdc++6
+      libX11-6
+      libXext6
+      libXrender1
       openssl
       xorg-x11-fonts
       zlib
@@ -563,5 +563,5 @@ fpm-params:
   vendor:       wkhtmltopdf
   maintainer:   Ashish Kulkarni <ashish@kulkarni.dev>
   url:          https://wkhtmltopdf.org/
-  prefix:       /usr/local
+  prefix:       /usr
   category:     utils
