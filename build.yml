@@ -322,10 +322,10 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  centos7-x86_64:
+  centos8-x86_64:
     source: docker/Dockerfile.centos64
     args:
-      from: centos:7
+      from: centos:8
     output: rpm
     arch:   x86_64
     depend: >
@@ -344,10 +344,32 @@ docker-targets:
       xorg-x11-fonts-Type1
       zlib
 
-  centos8-x86_64:
+  centos8-i686:
+    source: docker/Dockerfile.centos32
+    args:
+      from: i386/centos:8
+    output: rpm
+    arch:   i686
+    depend: >
+      ca-certificates
+      fontconfig
+      freetype
+      glibc
+      libjpeg
+      libpng
+      libstdc++
+      libX11
+      libXext
+      libXrender
+      openssl
+      xorg-x11-fonts-75dpi
+      xorg-x11-fonts-Type1
+      zlib
+
+  centos7-x86_64:
     source: docker/Dockerfile.centos64
     args:
-      from: centos:8
+      from: centos:7
     output: rpm
     arch:   x86_64
     depend: >
