@@ -132,52 +132,6 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  jessie-amd64:
-    source: docker/Dockerfile.debian
-    args:
-      from: debian:jessie
-    output: deb
-    arch:   amd64
-    depend: >
-      ca-certificates
-      fontconfig
-      libc6
-      libfreetype6
-      libjpeg62-turbo
-      libpng12-0
-      libssl1.0.0
-      libstdc++6
-      libx11-6
-      libxcb1
-      libxext6
-      libxrender1
-      xfonts-75dpi
-      xfonts-base
-      zlib1g
-
-  jessie-i386:
-    source: docker/Dockerfile.debian
-    args:
-      from: i386/debian:jessie
-    output: deb
-    arch:   i386
-    depend: >
-      ca-certificates
-      fontconfig
-      libc6
-      libfreetype6
-      libjpeg62-turbo
-      libpng12-0
-      libssl1.0.0
-      libstdc++6
-      libx11-6
-      libxcb1
-      libxext6
-      libxrender1
-      xfonts-75dpi
-      xfonts-base
-      zlib1g
-
   bionic-amd64:
     source: docker/Dockerfile.debian
     args:
