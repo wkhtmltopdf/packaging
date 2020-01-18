@@ -228,54 +228,6 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  trusty-amd64:
-    source: docker/Dockerfile.debian
-    args:
-      from: ubuntu:trusty
-      jpeg: libjpeg-turbo8-dev
-    output: deb
-    arch:   amd64
-    depend: >
-      ca-certificates
-      fontconfig
-      libc6
-      libfreetype6
-      libjpeg-turbo8
-      libpng12-0
-      libssl1.0.0
-      libstdc++6
-      libx11-6
-      libxcb1
-      libxext6
-      libxrender1
-      xfonts-75dpi
-      xfonts-base
-      zlib1g
-
-  trusty-i386:
-    source: docker/Dockerfile.debian
-    args:
-      from: i386/ubuntu:trusty
-      jpeg: libjpeg-turbo8-dev
-    output: deb
-    arch:   i386
-    depend: >
-      ca-certificates
-      fontconfig
-      libc6
-      libfreetype6
-      libjpeg-turbo8
-      libpng12-0
-      libssl1.0.0
-      libstdc++6
-      libx11-6
-      libxcb1
-      libxext6
-      libxrender1
-      xfonts-75dpi
-      xfonts-base
-      zlib1g
-
   centos8-x86_64:
     source: docker/Dockerfile.centos64
     args:
