@@ -1,10 +1,10 @@
 # variables used in the build
 variables:
-  checkout: master
-  packaging_tag: 0.12.6-dev
-  iteration: '1'
+  checkout: afd6a78896957a4e5f6db912263037cbcb93be51
+  packaging_tag: 0.12.1.4-2
+  iteration: '2'
   pre_release: true
-  draft: true
+  draft: false
 
 # package builds will always be manually triggered
 trigger: none
