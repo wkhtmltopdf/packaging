@@ -10,15 +10,32 @@ variables:
 trigger: none
 
 jobs:
-- job: 'buster_amd64'
+- job: 'docker'
   pool:
     vmImage: 'ubuntu-18.04'
+  strategy:
+    matrix:
+      buster_amd64:
+        target: buster-amd64
+      stretch_amd64:
+        target: stretch-amd64
+      bionic_amd64:
+        target: bionic-amd64
+      xenial_amd64:
+        target: xenial-amd64
+      centos8_x86_64:
+        target: centos8-x86_64
+      centos7_x86_64:
+        target: centos7-x86_64
+      centos6_x86_64:
+        target: centos6-x86_64
+  timeoutInMinutes: 0
   steps:
   - script: |
       git clone --recurse-submodules https://github.com/wkhtmltopdf/wkhtmltopdf.git
       cd wkhtmltopdf && git checkout $(checkout) && git submodule update
     displayName: 'clone wkhtmltopdf'
-  - script: python build package-docker --iteration $(iteration) buster-amd64 wkhtmltopdf
+  - script: python build package-docker --iteration $(iteration) $(target) wkhtmltopdf
     displayName: 'build package'
   - task: GithubRelease@0
     displayName: 'upload package'
@@ -31,150 +48,9 @@ jobs:
       tag: '$(packaging_tag)'
       isDraft: '$(draft)'
       isPreRelease: '$(pre_release)'
-      assetUploadMode: replace
-      assets: targets/*.deb
       addChangeLog: false
-- job: 'stretch_amd64'
-  pool:
-    vmImage: 'ubuntu-18.04'
-  steps:
-  - script: |
-      git clone --recurse-submodules https://github.com/wkhtmltopdf/wkhtmltopdf.git
-      cd wkhtmltopdf && git checkout $(checkout) && git submodule update
-    displayName: 'clone wkhtmltopdf'
-  - script: python build package-docker --iteration $(iteration) stretch-amd64 wkhtmltopdf
-    displayName: 'build package'
-  - task: GithubRelease@0
-    displayName: 'upload package'
-    inputs:
-      gitHubConnection: github_ashkulz
-      repositoryName: wkhtmltopdf/packaging
-      action: edit
-      target: '$(Build.SourceVersion)'
-      tagSource: manual
-      tag: '$(packaging_tag)'
-      isDraft: '$(draft)'
-      isPreRelease: '$(pre_release)'
       assetUploadMode: replace
-      assets: targets/*.deb
-      addChangeLog: false
-- job: 'bionic_amd64'
-  pool:
-    vmImage: 'ubuntu-18.04'
-  steps:
-  - script: |
-      git clone --recurse-submodules https://github.com/wkhtmltopdf/wkhtmltopdf.git
-      cd wkhtmltopdf && git checkout $(checkout) && git submodule update
-    displayName: 'clone wkhtmltopdf'
-  - script: python build package-docker --iteration $(iteration) bionic-amd64 wkhtmltopdf
-    displayName: 'build package'
-  - task: GithubRelease@0
-    displayName: 'upload package'
-    inputs:
-      gitHubConnection: github_ashkulz
-      repositoryName: wkhtmltopdf/packaging
-      action: edit
-      target: '$(Build.SourceVersion)'
-      tagSource: manual
-      tag: '$(packaging_tag)'
-      isDraft: '$(draft)'
-      isPreRelease: '$(pre_release)'
-      assetUploadMode: replace
-      assets: targets/*.deb
-      addChangeLog: false
-- job: 'xenial_amd64'
-  pool:
-    vmImage: 'ubuntu-18.04'
-  steps:
-  - script: |
-      git clone --recurse-submodules https://github.com/wkhtmltopdf/wkhtmltopdf.git
-      cd wkhtmltopdf && git checkout $(checkout) && git submodule update
-    displayName: 'clone wkhtmltopdf'
-  - script: python build package-docker --iteration $(iteration) xenial-amd64 wkhtmltopdf
-    displayName: 'build package'
-  - task: GithubRelease@0
-    displayName: 'upload package'
-    inputs:
-      gitHubConnection: github_ashkulz
-      repositoryName: wkhtmltopdf/packaging
-      action: edit
-      target: '$(Build.SourceVersion)'
-      tagSource: manual
-      tag: '$(packaging_tag)'
-      isDraft: '$(draft)'
-      isPreRelease: '$(pre_release)'
-      assetUploadMode: replace
-      assets: targets/*.deb
-      addChangeLog: false
-- job: 'centos8_x86_64'
-  pool:
-    vmImage: 'ubuntu-18.04'
-  steps:
-  - script: |
-      git clone --recurse-submodules https://github.com/wkhtmltopdf/wkhtmltopdf.git
-      cd wkhtmltopdf && git checkout $(checkout) && git submodule update
-    displayName: 'clone wkhtmltopdf'
-  - script: python build package-docker --iteration $(iteration) centos8-x86_64 wkhtmltopdf
-    displayName: 'build package'
-  - task: GithubRelease@0
-    displayName: 'upload package'
-    inputs:
-      gitHubConnection: github_ashkulz
-      repositoryName: wkhtmltopdf/packaging
-      action: edit
-      target: '$(Build.SourceVersion)'
-      tagSource: manual
-      tag: '$(packaging_tag)'
-      isDraft: '$(draft)'
-      isPreRelease: '$(pre_release)'
-      assetUploadMode: replace
-      assets: targets/*.rpm
-      addChangeLog: false
-- job: 'centos7_x86_64'
-  pool:
-    vmImage: 'ubuntu-18.04'
-  steps:
-  - script: |
-      git clone --recurse-submodules https://github.com/wkhtmltopdf/wkhtmltopdf.git
-      cd wkhtmltopdf && git checkout $(checkout) && git submodule update
-    displayName: 'clone wkhtmltopdf'
-  - script: python build package-docker --iteration $(iteration) centos7-x86_64 wkhtmltopdf
-    displayName: 'build package'
-  - task: GithubRelease@0
-    displayName: 'upload package'
-    inputs:
-      gitHubConnection: github_ashkulz
-      repositoryName: wkhtmltopdf/packaging
-      action: edit
-      target: '$(Build.SourceVersion)'
-      tagSource: manual
-      tag: '$(packaging_tag)'
-      isDraft: '$(draft)'
-      isPreRelease: '$(pre_release)'
-      assetUploadMode: replace
-      assets: targets/*.rpm
-      addChangeLog: false
-- job: 'centos6_x86_64'
-  pool:
-    vmImage: 'ubuntu-18.04'
-  steps:
-  - script: |
-      git clone --recurse-submodules https://github.com/wkhtmltopdf/wkhtmltopdf.git
-      cd wkhtmltopdf && git checkout $(checkout) && git submodule update
-    displayName: 'clone wkhtmltopdf'
-  - script: python build package-docker --iteration $(iteration) centos6-x86_64 wkhtmltopdf
-    displayName: 'build package'
-  - task: GithubRelease@0
-    displayName: 'upload package'
-    inputs:
-      gitHubConnection: github_ashkulz
-      repositoryName: wkhtmltopdf/packaging
-      action: edit
-      target: '$(Build.SourceVersion)'
-      tagSource: manual
-      tag: '$(packaging_tag)'
-      isDraft: '$(draft)'
-      isPreRelease: '$(pre_release)'
-      assetUploadMode: replace
-      assets: targets/*.rpm
-      addChangeLog: false
+      assets: |
+        targets/*.deb
+        targets/*.rpm
+        targets/*.7z
