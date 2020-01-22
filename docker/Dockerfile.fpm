@@ -1,7 +1,7 @@
 FROM ruby:2.5-slim-stretch
 MAINTAINER Ashish Kulkarni <ashish@kulkarni.dev>
 
-RUN apt-get update && \
+RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
         curl \
         gcc \

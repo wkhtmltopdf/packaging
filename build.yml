@@ -506,7 +506,7 @@ qt-config:
     -openssl-linked
 
 # docker image which provides fpm
-fpm-image:      wkhtmltopdf/fpm:20190502
+fpm-image:      quay.io/wkhtmltopdf/packaging:fpm_20200122
 
 # parameters for building linux packages via fpm (deb/rpm)
 fpm-params:
