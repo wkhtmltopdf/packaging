@@ -29,6 +29,10 @@ jobs:
         target: centos7-x86_64
       centos6_x86_64:
         target: centos6-x86_64
+      mxe_win32:
+        target: mxe-cross-win32
+      mxe_win64:
+        target: mxe-cross-win64
   timeoutInMinutes: 0
   steps:
   - script: |
