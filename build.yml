@@ -111,7 +111,7 @@ docker-targets:
   raspbian.stretch-armhf:
     source: docker/Dockerfile.debian
     args:
-      from: resin/rpi-raspbian:stretch
+      from: balenalib/rpi-raspbian:stretch
     output: deb
     qemu:   true
     arch:   armhf
