@@ -62,6 +62,30 @@ docker-targets:
       xfonts-base
       zlib1g
 
+  raspbian.buster-armhf:
+    source: docker/Dockerfile.debian
+    args:
+      from: balenalib/rpi-raspbian:buster
+    output: deb
+    qemu:   true
+    arch:   armhf
+    depend: >
+      ca-certificates
+      fontconfig
+      libc6
+      libfreetype6
+      libjpeg62-turbo
+      libpng16-16
+      libssl1.1
+      libstdc++6
+      libx11-6
+      libxcb1
+      libxext6
+      libxrender1
+      xfonts-75dpi
+      xfonts-base
+      zlib1g
+
   stretch-amd64:
     source: docker/Dockerfile.debian
     args:

@@ -35,6 +35,8 @@ jobs:
         target: mxe-cross-win64
       stretch_raspbian:
         target: raspbian.stretch-armhf
+      buster_raspbian:
+        target: raspbian.buster-armhf
   timeoutInMinutes: 0
   steps:
   - script: |
