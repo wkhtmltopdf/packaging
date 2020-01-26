@@ -2,7 +2,7 @@
 docker-prefix: quay.io/wkhtmltopdf/packaging:0.12_
 
 # command to run for enabling foreign-arch support in currently running kernel (>= 4.8)
-qemu-cmd:      docker run --rm --privileged multiarch/qemu-user-static:register --reset
+qemu-cmd:      docker run --rm --privileged fkrull/qemu-user-static enable
 
 # all targets supported by the docker-related commands, keys are as follows:
 #
