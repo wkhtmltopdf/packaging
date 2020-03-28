@@ -38,12 +38,12 @@ RUN apt-get update && apt-get install -y -q --no-install-recommends \
 
 RUN git clone https://github.com/mxe/mxe.git /opt/mxe \
     && cd /opt/mxe \
-    && git checkout 433b75ca \
+    && git checkout 3a84473a \
     && make MXE_TARGETS="i686-w64-mingw32.static x86_64-w64-mingw32.static" \
         cc zlib openssl libpng jpeg
 # ===== 8a0bc9f7 =====
 # zlib      1.2.11
-# openssl   1.1.1d
+# openssl   1.1.1e
 # libpng    1.6.37
 # jpeg      9d
 # ====================
