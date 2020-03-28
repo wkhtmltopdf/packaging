@@ -33,7 +33,7 @@ def docker_images(config, images, push):
     prefix = config['docker-prefix']
     target = sorted(images if len(images) else list(config['docker-targets'].keys()))
     if push:
-        shell('docker login')
+        shell('docker login quay.io')
 
     shell(config['qemu-cmd'])
     for name in target:
