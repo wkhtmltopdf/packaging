@@ -208,7 +208,7 @@ def build_vagrant(config, target, src_dir, iteration, clean=False, debug=False, 
         os.environ['CONAN_USER_HOME'] = os.path.abspath('.')
         c_build = 'missing' if not clean else '*'
         c_debug = '-s build_type=Debug' if debug else ''
-        shell('conan install . -p %s --build "%s" %s' % (target, c_build, c_debug))
+        shell('conan install . --profile %s --build "%s" %s' % (target, c_build, c_debug))
 
         custom = importlib.import_module('vagrant.%s' % cfg.get('custom_build', vm))
         custom_cfg, custom_qmk = custom.prepare_build(config, target, tgt_dir, src_dir)
