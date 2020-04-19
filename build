@@ -160,7 +160,7 @@ def build_vagrant(config, target, src_dir, iteration, clean=False, debug=False, 
         sys.exit(1)
 
     if version == ['-', '-']:
-        version = get_version(src_dir, '0')
+        version = get_version(src_dir, iteration)
 
     cfg  = config['vagrant-targets'][target]
     vm   = cfg['vm']
