@@ -60,3 +60,40 @@ jobs:
         targets/*.deb
         targets/*.rpm
         targets/*.7z
+- job: 'msvc2015'
+  pool:
+    vmImage: 'vs2017-win2016'
+  strategy:
+    matrix:
+      win64:
+        target: msvc2015-win64
+      win32:
+        target: msvc2015-win32
+  timeoutInMinutes: 0
+  steps:
+  - script: |
+      choco install -yr --no-progress vcbuildtools -ia "/Full"
+      pip install -q conan
+      cmd /c attrib "C:\Program Files (x86)\Windows Kits\10\include\wdf" +H
+    displayName: 'install dependencies'
+  - script: |
+      git clone --recurse-submodules https://github.com/wkhtmltopdf/wkhtmltopdf.git
+      cd wkhtmltopdf && git checkout $(checkout) && git submodule update
+    displayName: 'clone wkhtmltopdf'
+  - script: python build vagrant $(target) --version - - --iteration $(iteration) wkhtmltopdf
+    displayName: 'build package'
+  - task: GithubRelease@0
+    displayName: 'upload package'
+    inputs:
+      gitHubConnection: github_ashkulz
+      repositoryName: wkhtmltopdf/packaging
+      action: edit
+      target: '$(Build.SourceVersion)'
+      tagSource: manual
+      tag: '$(packaging_tag)'
+      isDraft: '$(draft)'
+      isPreRelease: '$(pre_release)'
+      addChangeLog: false
+      assetUploadMode: replace
+      assets: |
+        *.exe
