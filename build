@@ -159,6 +159,7 @@ def build_vagrant(config, target, src_dir, iteration, clean=False, debug=False, 
         message('Qt not present in wkhtmltopdf source: %s' %  src_dir)
         sys.exit(1)
 
+    no_version_specified = version is None or version == ['-', '-']
     if version == ['-', '-']:
         version = get_version(src_dir, iteration)
 
@@ -167,7 +168,7 @@ def build_vagrant(config, target, src_dir, iteration, clean=False, debug=False, 
     base = '%s/%s' % (cfg['home_in_rsync'], target)
 
     src_dir = os.path.abspath(src_dir)
-    tgt_dir = os.path.abspath('./targets' if not version else '../build')
+    tgt_dir = os.path.abspath('./targets' if no_version_specified else '../build')
     if not os.path.exists(tgt_dir):
         os.makedirs(tgt_dir)
 
