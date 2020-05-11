@@ -1,0 +1,26 @@
+ARG  from
+FROM ${from}
+
+ARG  jpeg=libjpeg-dev
+ARG  ssl=libssl-dev
+ENV  CFLAGS=-w CXXFLAGS=-w
+
+RUN apt-get update && apt-get install -y -q --no-install-recommends \
+    dpkg-dev \
+    libc6-dev \
+    make \
+    gcc-7 \
+    g++-7 \
+    libfontconfig1-dev \
+    libfreetype6-dev \
+    $jpeg \
+    libpng-dev \
+    $ssl \
+    libx11-dev \
+    libxext-dev \
+    libxrender-dev \
+    python \
+    zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN ln -s /usr/bin/gcc-7 /usr/bin/gcc; ln -s /usr/bin/gcc-ar-7 /usr/bin/gcc-ar; ln -s /usr/bin/gcc-nm-7 /usr/bin/gcc-nm; ln -s /usr/bin/gcc-ranlib-7 /usr/bin/gcc-ranlib; ln -s /usr/bin/gcov-7 /usr/bin/gcov; ln -s /usr/bin/gcov-dump-7 /usr/bin/gcov-dump; ln -s /usr/bin/gcov-tool-7 /usr/bin/gcov-tool; ln -s /usr/bin/g++-7 /usr/bin/g++; ln -s /usr/bin/cpp-7 /usr/bin/cpp
