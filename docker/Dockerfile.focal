@@ -1,0 +1,26 @@
+ARG  from
+FROM ${from}
+
+ARG  jpeg=libjpeg-dev
+ARG  ssl=libssl-dev
+ENV  CFLAGS=-w CXXFLAGS=-w
+
+RUN apt-get update && apt-get install -y -q --no-install-recommends \
+    dpkg-dev \
+    libc6-dev \
+    make \
+    gcc-7 \
+    g++-7 \
+    libfontconfig1-dev \
+    libfreetype6-dev \
+    $jpeg \
+    libpng-dev \
+    $ssl \
+    libx11-dev \
+    libxext-dev \
+    libxrender-dev \
+    python \
+    zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 10 --slave /usr/bin/g++ g++ /usr/bin/g++-7 --slave /usr/bin/cpp cpp /usr/bin/cpp-7

@@ -132,6 +132,30 @@ docker-targets:
       xfonts-base
       zlib1g
 
+  focal-amd64:
+    source: docker/Dockerfile.focal
+    args:
+      from: ubuntu:focal
+      jpeg: libjpeg-turbo8-dev
+    output: deb
+    arch:   amd64
+    depend: >
+      ca-certificates
+      fontconfig
+      libc6
+      libfreetype6
+      libjpeg-turbo8
+      libpng16-16
+      libssl1.1
+      libstdc++6
+      libx11-6
+      libxcb1
+      libxext6
+      libxrender1
+      xfonts-75dpi
+      xfonts-base
+      zlib1g
+
   bionic-amd64:
     source: docker/Dockerfile.debian
     args:
