@@ -34,7 +34,7 @@ def prepare_build(config, target, build_dir, src_dir):
 
     os.environ.update(json.loads(stdout if isinstance(stdout, str) else stdout.decode('utf-8')))
 
-    return 'OPENSSL_LIBS="-lssleay32 -llibeay32 -lUser32 -lAdvapi32 -lGdi32 -lCrypt32"', ''
+    return '-D LIBJPEG_STATIC OPENSSL_LIBS="-llibssl -llibcrypto -lUser32 -lAdvapi32 -lGdi32 -lCrypt32"', ''
 
 def package_build(config, target, build_dir, src_dir, version):
     import os, subprocess

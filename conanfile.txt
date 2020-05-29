@@ -1,8 +1,8 @@
 [requires]
-zlib/1.2.11@conan/stable
-OpenSSL/1.0.2o@conan/stable
-libpng/1.6.34@bincrafters/stable
-libjpeg/9c@bincrafters/stable
+zlib/1.2.11
+openssl/1.1.1g
+libpng/1.6.37
+libjpeg/9d
 
 [generators]
 json
