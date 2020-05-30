@@ -19,6 +19,8 @@ jobs:
         target: buster-amd64
       stretch_amd64:
         target: stretch-amd64
+      focal_amd64:
+        target: focal-amd64
       bionic_amd64:
         target: bionic-amd64
       xenial_amd64:
