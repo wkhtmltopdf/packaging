@@ -29,23 +29,31 @@ def shell(cmd, cwd=None):
         message('%s\ncommand failed: exit code %d' % (cmd, ret))
         sys.exit(1)
 
-def docker_images(config, images, push):
+def output(cmd, **args):
+    try:
+        text = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT, **args).strip()
+        return text if isinstance(text, str) else text.decode('utf-8')
+    except:
+        return None
+
+def docker_images(config, targets, force):
     prefix = config['docker-prefix']
-    target = sorted(images if len(images) else list(config['docker-targets'].keys()))
-    if push:
-        shell('docker login quay.io')
+    images = (output('docker images --format "{{.Repository}}:{{.Tag}}"') or '').strip().split('\n')
 
     shell(config['qemu-cmd'])
-    for name in target:
+    for name in sorted(targets):
         if name not in config['docker-targets']:
             message('Unknown target specified: %s' % name)
             sys.exit(1)
+        image = prefix+name
+        if image in images:
+            if force:
+                shell('docker rmi %s' % image)
+            else:
+                continue
         params = config['docker-targets'][name]
         args   = ' '.join('--build-arg %s=%s' % a for a in params['args'].items()) if 'args' in params else ''
-        shell('docker build -f %(source)s %(args)s -t %(prefix)s%(name)s .' % dict(params,
-                args=args, prefix=prefix, name=name))
-        if push:
-            shell('docker push %s%s' % (prefix, name))
+        shell('docker build -f %s %s -t %s .' % (params['source'], args, image))
 
 def get_version(src_dir, iteration):
     rel_ver = open(os.path.join(src_dir, 'VERSION'), 'r').read().strip()
@@ -53,14 +61,7 @@ def get_version(src_dir, iteration):
         return (rel_ver, iteration)
 
     rel_ver, rel_tag = rel_ver.split('-', 1)
-    def output(cmd):
-        try:
-            text = subprocess.check_output(cmd.split(' '), cwd=src_dir, stderr=subprocess.STDOUT).strip()
-            return text if isinstance(text, str) else text.decode('utf-8')
-        except:
-            return None
-
-    describe = output('git describe --tags --long')
+    describe = output('git describe --tags --long', cwd=src_dir)
     if not describe:
         today = datetime.datetime.now().strftime('%Y%m%d')
         return (rel_ver, '0.%s.%s' % (today, rel_tag))
@@ -83,6 +84,7 @@ def compile_docker(config, target, src_dir, tgt_dir, debug=False):
         message('Qt not present in wkhtmltopdf source: %s' %  src_dir)
         sys.exit(1)
 
+    docker_images(config, [target], False)
     shell('mkdir -p %(tgt)s/app %(tgt)s/qt' % dict(tgt=tgt_dir))
 
     cross  = config['docker-targets'][target].get('cross_compile')
@@ -253,9 +255,10 @@ def main():
     parser = argparse.ArgumentParser(prog='build')
     sub    = parser.add_subparsers(title='TARGETS', metavar='<target>')
 
-    docker = sub.add_parser('docker-images', help='rebuild all docker images')
-    docker.add_argument('--push', action='store_true', default=False, help='push to DockerHub after building')
-    docker.add_argument('images', nargs='*', help='images to build')
+    docker = sub.add_parser('docker-images', help='build docker images')
+    docker.add_argument('--force', action='store_true', default=False, help='force rebuild for all specified targets')
+    docker.add_argument('targets', nargs='+', metavar='TARGET', help='targets for which to build images')
+
     docker.set_defaults(func=docker_images)
 
     compile = sub.add_parser('compile-docker', help='compile source via Docker image')
@@ -292,7 +295,7 @@ def main():
     bdir = os.path.dirname(os.path.abspath(__file__))
     with open(os.path.join(bdir, 'build.yml'), 'r') as f:
         os.chdir(bdir)
-        func(yaml.load(f.read()), **args)
+        func(yaml.safe_load(f.read()), **args)
 
 if __name__ == '__main__':
     main()
