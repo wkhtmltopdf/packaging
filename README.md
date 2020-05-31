@@ -23,15 +23,18 @@ The software requirements on the build machine are:
 * `git` and `p7zip`
 * `python` and `PyYAML`
 * `docker` >= 17.05 (for linux targets)
-  * build-time args in FROM were introduced in this version
+  * build-time args in `FROM` were introduced in this version
 * Linux kernel >= 4.8 (for linux targets -- foreign archs only)
   * for seamless foreign arch emulation via qemu-user-static
 * `vagrant` with `virtualbox` (for non-linux targets)
 
-On Ubuntu 18.04, this can be installed via a single command:
+On Ubuntu 20.04, this can be installed via a single command:
 
     sudo apt install -y python-yaml docker.io vagrant virtualbox p7zip-full
 
+If you're building for a non-default architecture, you may need to enable
+the `experimental: "true"` flag to enable `docker pull --platform`: see
+https://docs.docker.com/engine/reference/commandline/pull/#options
 
 Build System
 ============
@@ -51,10 +54,6 @@ to ensure that the latest images are pulled.
 
 Docker
 ------
-
-The docker images are published to Docker Hub, so you don't need to build
-them everytime. In case you are building for a new target, you can run the
-command `./build docker-images <target>` to generate a local image.
 
 For building, just use the `./build package-docker` command and it will
 generate a package in the `targets` folder. If you don't specify `--clean`,

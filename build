@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright 2018 wkhtmltopdf authors
+# Copyright 2018-2020 wkhtmltopdf authors
 #
 # This file is part of wkhtmltopdf.
 #
@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with wkhtmltopdf. If not, see <http://www.gnu.org/licenses/#LGPL>.
 
-import argparse, datetime, importlib, json, multiprocessing, os, subprocess, sys, yaml
+import argparse, copy, datetime, importlib, json, multiprocessing, os, subprocess, sys, yaml
 
 def message(msg):
     sys.stdout.write(msg+'\n')
@@ -38,22 +38,40 @@ def output(cmd, **args):
 
 def docker_images(config, targets, force):
     prefix = config['docker-prefix']
-    images = (output('docker images --format "{{.Repository}}:{{.Tag}}"') or '').strip().split('\n')
+    images = []
 
-    shell(config['qemu-cmd'])
-    for name in sorted(targets):
+    def pull(image, platform):
+        if image in images:
+            shell('docker rmi -f %s' % image)
+        if platform != 'linux/amd64':
+            if output('docker version --format "{{.Server.Experimental}}"') != 'true':
+                message('Could not detect experimental: true in docker daemon, aborting.')
+                sys.exit(1)
+            shell('docker pull --platform %s %s' % (platform or 'linux/amd64', image))
+        else:
+            shell('docker pull %s' % image)
+
+    started_qemu = None
+    for name in targets:
         if name not in config['docker-targets']:
             message('Unknown target specified: %s' % name)
             sys.exit(1)
-        image = prefix+name
-        if image in images:
-            if force:
-                shell('docker rmi %s' % image)
-            else:
-                continue
+
+        images = (output('docker images --format "{{.Repository}}:{{.Tag}}"') or '').strip().split('\n')
         params = config['docker-targets'][name]
-        args   = ' '.join('--build-arg %s=%s' % a for a in params['args'].items())
-        shell('docker build -f %s %s -t %s .' % (params['source'], args, image))
+        needed_qemu = params.get('qemu')
+        if needed_qemu and started_qemu != needed_qemu:
+            pull('aptman/qus:latest', needed_qemu)
+            shell('docker run --rm --privileged aptman/qus:latest -- -r')
+            shell('docker run --rm --privileged aptman/qus:latest -s -- -p')
+            started_qemu = needed_qemu
+
+        image = prefix+name
+        args  = ' '.join('--build-arg %s=%s' % a for a in params['args'].items())
+        if force or image not in images:
+            if 'from' in params.get('args', {}):
+                pull(params['args']['from'], params.get('platform') or 'linux/amd64')
+            shell('docker build -f %s %s -t %s docker/' % (params['source'], args, image))
 
 def get_version(src_dir, iteration):
     rel_ver = open(os.path.join(src_dir, 'VERSION'), 'r').read().strip()
@@ -115,8 +133,6 @@ def package_docker(config, target, src_dir, iteration, clean=False):
     if clean:
         shell('rm -fr %s' % tgt_dir)
 
-    if config['docker-targets'][target].get('qemu'):
-        shell(config['qemu-cmd'])
     compile_docker(config, target, src_dir, tgt_dir)
 
     pkg_ver, pkg_iter = get_version(src_dir, iteration)
@@ -295,7 +311,23 @@ def main():
     bdir = os.path.dirname(os.path.abspath(__file__))
     with open(os.path.join(bdir, 'build.yml'), 'r') as f:
         os.chdir(bdir)
-        func(yaml.safe_load(f.read()), **args)
+        config = yaml.safe_load(f.read())
+        # expand matrix into separate per-arch targets
+        for name in list(config['docker-targets'].keys()):
+            distro_arch = config['docker-targets'][name].get('matrix')
+            if not distro_arch:
+                continue
+            for arch in distro_arch:
+                target = copy.deepcopy(config['docker-targets'][name])
+                del target['matrix']
+                target['arch'] = arch
+                target['platform'] = config['matrix-platforms'][arch]
+                if target['platform'] not in ('linux/amd64', 'linux/386'):
+                    # workaround https://bugs.launchpad.net/qemu/+bug/1805913 for 32-bit targets
+                    target['qemu'] = 'linux/amd64' if target['platform'] not in ('linux/arm/v5', 'linux/arm/v7') else 'linux/386'
+                config['docker-targets']['%s-%s' % (name, arch)] = target
+            del config['docker-targets'][name]
+        func(config, **args)
 
 if __name__ == '__main__':
     main()

@@ -1,27 +1,25 @@
 # prefix used in determining full image name in "docker-images" and "compile-docker"
 docker-prefix: "wkhtmltopdf/0.12:"
 
-# command to run for enabling foreign-arch support in currently running kernel (>= 4.8)
-qemu-cmd:      docker run --rm --privileged fkrull/qemu-user-static enable
-
 # all targets supported by the docker-related commands, keys are as follows:
 #
 #   source:         Dockerfile used to build image
 #   output:         one of deb, rpm, tar or 7z
 #   args:           build-time docker args (optional)
 #   arch:           used as arch specified to fpm (for deb or rpm output)
+#   matrix:         list of architectures distro supports (NOTE: generates per-arch targets)
 #   depend:         dependent packages specified to fpm (for deb or rpm output)
 #   qt_config:      override the qt configuration used for building Qt (optional)
 #   cross_compile:  use given prefix for cross-compilation (optional)
-#   qemu:           set to true if qemu emulation is required (optional)
+#   qemu:           emulate via qemu-user-static image for specified platform
 #
 docker-targets:
-  buster-amd64:
+  buster:
     source: docker/Dockerfile.debian
     args:
       from: debian:buster
     output: deb
-    arch:   amd64
+    matrix: ['amd64', 'i386']
     depend: >
       ca-certificates
       fontconfig
@@ -39,58 +37,12 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  buster-i386:
-    source: docker/Dockerfile.debian
-    args:
-      from: i386/debian:buster
-    output: deb
-    arch:   i386
-    depend: >
-      ca-certificates
-      fontconfig
-      libc6
-      libfreetype6
-      libjpeg62-turbo
-      libpng16-16
-      libssl1.1
-      libstdc++6
-      libx11-6
-      libxcb1
-      libxext6
-      libxrender1
-      xfonts-75dpi
-      xfonts-base
-      zlib1g
-
-  stretch-amd64:
+  stretch:
     source: docker/Dockerfile.debian
     args:
       from: debian:stretch
     output: deb
-    arch:   amd64
-    depend: >
-      ca-certificates
-      fontconfig
-      libc6
-      libfreetype6
-      libjpeg62-turbo
-      libpng16-16
-      libssl1.1
-      libstdc++6
-      libx11-6
-      libxcb1
-      libxext6
-      libxrender1
-      xfonts-75dpi
-      xfonts-base
-      zlib1g
-
-  stretch-i386:
-    source: docker/Dockerfile.debian
-    args:
-      from: i386/debian:stretch
-    output: deb
-    arch:   i386
+    matrix: ['amd64', 'i386']
     depend: >
       ca-certificates
       fontconfig
@@ -113,7 +65,7 @@ docker-targets:
     args:
       from: balenalib/rpi-raspbian:stretch
     output: deb
-    qemu:   true
+    qemu:   linux/amd64
     arch:   armhf
     depend: >
       ca-certificates
@@ -132,13 +84,13 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  focal-amd64:
+  focal:
     source: docker/Dockerfile.focal
     args:
       from: ubuntu:focal
       jpeg: libjpeg-turbo8-dev
     output: deb
-    arch:   amd64
+    matrix: ['amd64']
     depend: >
       ca-certificates
       fontconfig
@@ -156,13 +108,13 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  bionic-amd64:
+  bionic:
     source: docker/Dockerfile.debian
     args:
       from: ubuntu:bionic
       jpeg: libjpeg-turbo8-dev
     output: deb
-    arch:   amd64
+    matrix: ['amd64', 'i386']
     depend: >
       ca-certificates
       fontconfig
@@ -180,37 +132,13 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  bionic-i386:
-    source: docker/Dockerfile.debian
-    args:
-      from: i386/ubuntu:bionic
-      jpeg: libjpeg-turbo8-dev
-    output: deb
-    arch:   i386
-    depend: >
-      ca-certificates
-      fontconfig
-      libc6
-      libfreetype6
-      libjpeg-turbo8
-      libpng16-16
-      libssl1.1
-      libstdc++6
-      libx11-6
-      libxcb1
-      libxext6
-      libxrender1
-      xfonts-75dpi
-      xfonts-base
-      zlib1g
-
-  xenial-amd64:
+  xenial:
     source: docker/Dockerfile.debian
     args:
       from: ubuntu:xenial
       jpeg: libjpeg-turbo8-dev
     output: deb
-    arch:   amd64
+    matrix: ['amd64', 'i386']
     depend: >
       ca-certificates
       fontconfig
@@ -228,36 +156,12 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  xenial-i386:
-    source: docker/Dockerfile.debian
-    args:
-      from: i386/ubuntu:xenial
-      jpeg: libjpeg-turbo8-dev
-    output: deb
-    arch:   i386
-    depend: >
-      ca-certificates
-      fontconfig
-      libc6
-      libfreetype6
-      libjpeg-turbo8
-      libpng12-0
-      libssl1.0.0
-      libstdc++6
-      libx11-6
-      libxcb1
-      libxext6
-      libxrender1
-      xfonts-75dpi
-      xfonts-base
-      zlib1g
-
-  centos8-x86_64:
-    source: docker/Dockerfile.centos64
+  centos8:
+    source: docker/Dockerfile.centos
     args:
       from: centos:8
     output: rpm
-    arch:   x86_64
+    matrix: ['x86_64']
     depend: >
       ca-certificates
       fontconfig
@@ -274,34 +178,12 @@ docker-targets:
       xorg-x11-fonts-Type1
       zlib
 
-  centos7-x86_64:
-    source: docker/Dockerfile.centos64
+  centos7:
+    source: docker/Dockerfile.centos
     args:
       from: centos:7
     output: rpm
-    arch:   x86_64
-    depend: >
-      ca-certificates
-      fontconfig
-      freetype
-      glibc
-      libjpeg
-      libpng
-      libstdc++
-      libX11
-      libXext
-      libXrender
-      openssl
-      xorg-x11-fonts-75dpi
-      xorg-x11-fonts-Type1
-      zlib
-
-  centos7-i686:
-    source: docker/Dockerfile.centos32
-    args:
-      from: i386/centos:7
-    output: rpm
-    arch:   i686
+    matrix: ['x86_64', 'i686']
     depend: >
       ca-certificates
       fontconfig
@@ -319,7 +201,7 @@ docker-targets:
       zlib
 
   centos6-x86_64:
-    source: docker/Dockerfile.centos64
+    source: docker/Dockerfile.centos
     args:
       from: centos:6
     output: rpm
@@ -341,11 +223,12 @@ docker-targets:
       zlib
 
   centos6-i686:
-    source: docker/Dockerfile.centos32
+    source: docker/Dockerfile.centos6-i686
     args:
-      from: i386/centos:6
+      from: centos:6
     output: rpm
     arch:   i686
+    platform: linux/386
     depend: >
       ca-certificates
       fontconfig
@@ -537,6 +420,21 @@ qt-config:
 
 # docker image which provides fpm
 fpm-image:      wkhtmltopdf/fpm:1.10.2-20200531
+
+# mapping of distro architecture => docker platform
+matrix-platforms:
+  # debian/ubuntu
+  amd64:   linux/amd64
+  i386:    linux/386
+  armel:   linux/arm/v5
+  armhf:   linux/arm/v7
+  arm64:   linux/arm64/v8
+  # centos
+  x86_64:  linux/amd64
+  i686:    linux/386
+  aarch64: linux/arm64/v8
+  # common
+  ppc64le: linux/ppc64le
 
 # parameters for building linux packages via fpm (deb/rpm)
 fpm-params:
