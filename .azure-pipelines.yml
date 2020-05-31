@@ -40,6 +40,11 @@ jobs:
   timeoutInMinutes: 0
   steps:
   - script: |
+      echo '{ "experimental": true }' | sudo tee /etc/docker/daemon.json
+      sudo systemctl restart docker
+      python build docker-images $(target)
+    displayName: 'setup build environment'
+  - script: |
       git clone --recurse-submodules https://github.com/wkhtmltopdf/wkhtmltopdf.git
       cd wkhtmltopdf && git checkout $(checkout) && git submodule update
     displayName: 'clone wkhtmltopdf'

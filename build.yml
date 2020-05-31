@@ -1,5 +1,5 @@
 # prefix used in determining full image name in "docker-images" and "compile-docker"
-docker-prefix: quay.io/wkhtmltopdf/packaging:0.12_
+docker-prefix: "wkhtmltopdf/0.12:"
 
 # command to run for enabling foreign-arch support in currently running kernel (>= 4.8)
 qemu-cmd:      docker run --rm --privileged fkrull/qemu-user-static enable
