@@ -260,12 +260,12 @@ def build_vagrant(config, target, src_dir, iteration, clean=False, debug=False, 
     else:
         outside_vm()
 
-def build_release(config, src_dir, iteration):
+def list_targets(config):
     for target in sorted(config['docker-targets']):
-        package_docker(config, target, src_dir, iteration, clean=True)
+        message('docker\t%s' % target)
 
     for target in sorted(config['vagrant-targets']):
-        build_vagrant(config, target, src_dir, iteration, clean=True)
+        message('vagrant\t%s' % target)
 
 def main():
     parser = argparse.ArgumentParser(prog='build')
@@ -291,10 +291,8 @@ def main():
     package.add_argument('--iteration', default='1', help='iteration for release builds')
     package.set_defaults(func=package_docker)
 
-    release = sub.add_parser('release', help='create packages for all targets')
-    release.add_argument('src_dir', help='directory which has wkhtmltopdf source code')
-    release.add_argument('--iteration', default='1', help='iteration for release builds')
-    release.set_defaults(func=build_release)
+    targets = sub.add_parser('list-targets', help='list all available targets')
+    targets.set_defaults(func=list_targets)
 
     vagrant = sub.add_parser('vagrant', help='compile/package source via Vagrant VM')
     vagrant.add_argument('target',  help='target to use for compilation')

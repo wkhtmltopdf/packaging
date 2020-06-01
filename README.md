@@ -49,8 +49,7 @@ on the latest commit in git. In case you are rebuilding a tagged release, you
 can optionally specify an `--iteration` which is included in the filename, so
 that different filenames are generated if packaging scripts are different.
 
-Before a release build, it is recommended to run `docker system prune -af`
-to ensure that the latest images are pulled.
+Please use `build list-targets` to see all available targets.
 
 Docker
 ------
