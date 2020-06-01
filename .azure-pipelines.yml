@@ -35,8 +35,8 @@ jobs:
         target: mxe-cross-win32
       mxe_win64:
         target: mxe-cross-win64
-      stretch_raspbian:
-        target: raspbian.stretch-armhf
+      stretch_raspberrypi:
+        target: raspberrypi.stretch-armhf
   timeoutInMinutes: 0
   steps:
   - script: |
