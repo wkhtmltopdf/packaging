@@ -19,7 +19,7 @@ docker-targets:
     args:
       from: debian:buster
     output: deb
-    matrix: ['amd64', 'i386']
+    matrix: ['amd64', 'i386', 'arm64', 'armhf', 'armel', 'ppc64le']
     depend: >
       ca-certificates
       fontconfig
@@ -42,7 +42,7 @@ docker-targets:
     args:
       from: debian:stretch
     output: deb
-    matrix: ['amd64', 'i386']
+    matrix: ['amd64', 'i386', 'arm64', 'armhf', 'armel', 'ppc64le']
     depend: >
       ca-certificates
       fontconfig
@@ -90,7 +90,7 @@ docker-targets:
       from: ubuntu:focal
       jpeg: libjpeg-turbo8-dev
     output: deb
-    matrix: ['amd64']
+    matrix: ['amd64', 'arm64', 'ppc64le']
     depend: >
       ca-certificates
       fontconfig
@@ -114,7 +114,7 @@ docker-targets:
       from: ubuntu:bionic
       jpeg: libjpeg-turbo8-dev
     output: deb
-    matrix: ['amd64', 'i386']
+    matrix: ['amd64', 'i386', 'arm64', 'armhf', 'ppc64le']
     depend: >
       ca-certificates
       fontconfig
@@ -138,7 +138,7 @@ docker-targets:
       from: ubuntu:xenial
       jpeg: libjpeg-turbo8-dev
     output: deb
-    matrix: ['amd64', 'i386']
+    matrix: ['amd64', 'i386', 'arm64', 'armhf', 'ppc64le']
     depend: >
       ca-certificates
       fontconfig
@@ -161,7 +161,7 @@ docker-targets:
     args:
       from: centos:8
     output: rpm
-    matrix: ['x86_64']
+    matrix: ['x86_64', 'aarch64', 'ppc64le']
     depend: >
       ca-certificates
       fontconfig
@@ -183,7 +183,7 @@ docker-targets:
     args:
       from: centos:7
     output: rpm
-    matrix: ['x86_64', 'i686']
+    matrix: ['x86_64', 'i686', 'aarch64', 'ppc64le']
     depend: >
       ca-certificates
       fontconfig
