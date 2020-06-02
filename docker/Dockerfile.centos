@@ -4,6 +4,7 @@ FROM ${from}
 ENV  CFLAGS=-w CXXFLAGS=-w
 
 RUN yum install -y \
+    gzip \
     diffutils \
     fontconfig-devel \
     freetype-devel \
