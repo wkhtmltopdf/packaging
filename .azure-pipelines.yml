@@ -69,6 +69,38 @@ jobs:
         targets/*.deb
         targets/*.rpm
         targets/*.7z
+- job: 'self_hosted'
+  pool:
+    name: 'docker'
+  strategy:
+    matrix:
+      buster_raspberrypi:
+        target: raspberrypi.buster-armhf
+  timeoutInMinutes: 0
+  steps:
+  - script: |
+      git clone --recurse-submodules https://github.com/wkhtmltopdf/wkhtmltopdf.git
+      cd wkhtmltopdf && git checkout $(checkout) && git submodule update
+    displayName: 'clone wkhtmltopdf'
+  - script: python build package-docker --iteration $(iteration) $(target) wkhtmltopdf
+    displayName: 'build package'
+  - task: GithubRelease@0
+    displayName: 'upload package'
+    inputs:
+      gitHubConnection: github_ashkulz
+      repositoryName: wkhtmltopdf/packaging
+      action: edit
+      target: '$(Build.SourceVersion)'
+      tagSource: manual
+      tag: '$(packaging_tag)'
+      isDraft: '$(draft)'
+      isPreRelease: '$(pre_release)'
+      addChangeLog: false
+      assetUploadMode: replace
+      assets: |
+        targets/*.deb
+        targets/*.rpm
+        targets/*.7z
 - job: 'msvc2015'
   pool:
     vmImage: 'vs2017-win2016'
