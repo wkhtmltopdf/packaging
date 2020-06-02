@@ -364,12 +364,18 @@ docker-targets:
 
   mxe-cross-win32:
     source:         docker/Dockerfile.mxe
+    args:
+      from:   debian:buster
+      target: i686-w64-mingw32.static
     qt_config:      mingw-w64
     cross_compile:  i686-w64-mingw32.static-
     output:         7z
 
   mxe-cross-win64:
     source:         docker/Dockerfile.mxe
+    args:
+      from:   debian:buster
+      target: x86_64-w64-mingw32.static
     qt_config:      mingw-w64
     cross_compile:  x86_64-w64-mingw32.static-
     output:         7z

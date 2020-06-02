@@ -1,4 +1,6 @@
-FROM debian:buster
+ARG  from
+FROM ${from}
+ARG  target
 
 RUN apt-get update && apt-get install -y -q --no-install-recommends \
     autoconf \
@@ -39,7 +41,7 @@ RUN apt-get update && apt-get install -y -q --no-install-recommends \
 RUN git clone https://github.com/mxe/mxe.git /opt/mxe \
     && cd /opt/mxe \
     && git checkout ee88607e \
-    && make MXE_TARGETS="i686-w64-mingw32.static x86_64-w64-mingw32.static" \
+    && make MXE_TARGETS=$target \
         cc zlib openssl libpng jpeg
 # ===== ee88607e =====
 # zlib      1.2.11

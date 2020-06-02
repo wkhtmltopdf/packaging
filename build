@@ -52,7 +52,7 @@ def docker_images(config, targets, force):
             else:
                 continue
         params = config['docker-targets'][name]
-        args   = ' '.join('--build-arg %s=%s' % a for a in params['args'].items()) if 'args' in params else ''
+        args   = ' '.join('--build-arg %s=%s' % a for a in params['args'].items())
         shell('docker build -f %s %s -t %s .' % (params['source'], args, image))
 
 def get_version(src_dir, iteration):
