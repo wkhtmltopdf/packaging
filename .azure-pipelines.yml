@@ -113,7 +113,7 @@ jobs:
       git clone --recurse-submodules https://github.com/wkhtmltopdf/wkhtmltopdf.git
       cd wkhtmltopdf && git checkout $(checkout) && git submodule update
     displayName: 'clone wkhtmltopdf'
-  - script: python build package-docker --iteration $(iteration) $(target) wkhtmltopdf
+  - script: python build package-docker --clean --iteration $(iteration) $(target) wkhtmltopdf
     displayName: 'build package'
   - task: GithubRelease@0
     displayName: 'upload package'
@@ -144,10 +144,10 @@ jobs:
   timeoutInMinutes: 0
   steps:
   - script: |
-      git clone --recurse-submodules https://github.com/wkhtmltopdf/wkhtmltopdf.git
+      rm -fr wkhtmltopdf && git clone --recurse-submodules https://github.com/wkhtmltopdf/wkhtmltopdf.git
       cd wkhtmltopdf && git checkout $(checkout) && git submodule update
     displayName: 'clone wkhtmltopdf'
-  - script: python build package-docker --iteration $(iteration) $(target) wkhtmltopdf
+  - script: python build package-docker --clean --iteration $(iteration) $(target) wkhtmltopdf
     displayName: 'build package'
   - task: GithubRelease@0
     displayName: 'upload package'
