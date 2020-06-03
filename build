@@ -155,7 +155,7 @@ def package_docker(config, target, src_dir, iteration, clean=False):
         shell('rm -f targets/%s.7z' % archive)
         shell('cd targets/%s && 7z a ../%s.7z -mx9 wkhtmltox/' % (target, archive))
     elif output == 'deb':
-        fdeb = '-t deb --deb-compression xz --provides wkhtmltopdf --conflicts wkhtmltopdf --replaces wkhtmltopdf --deb-no-default-config-files'
+        fdeb = '-t deb --deb-compression xz --provides wkhtmltopdf --conflicts wkhtmltopdf --replaces wkhtmltopdf --deb-shlibs "libwkhtmltox 0 wkhtmltox (>= 0.12.0)"'
         shell('docker run --rm -v%s:/tgt -w/tgt %s %s' % (os.path.abspath('targets'), fpm_args, fdeb))
     elif output in ('rpm', 'rpm:bzip2'):
         frpm = '-t rpm --rpm-compression %s' % ('xz' if output == 'rpm' else 'bzip2')
