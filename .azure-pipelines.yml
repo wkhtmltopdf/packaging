@@ -15,6 +15,7 @@ jobs:
     vmImage: 'ubuntu-18.04'
   strategy:
     matrix:
+      # 64-bit x86
       buster_amd64:
         target: buster-amd64
       stretch_amd64:
@@ -39,8 +40,68 @@ jobs:
         target: mxe-cross-win32
       mxe_win64:
         target: mxe-cross-win64
-      stretch_raspberrypi:
-        target: raspberrypi.stretch-armhf
+      # 32-bit x86
+      bionic_i386:
+        target: bionic-i386
+      buster_i386:
+        target: buster-i386
+      centos6_i686:
+        target: centos6-i686
+      centos7_i686:
+        target: centos7-i686
+      stretch_i386:
+        target: stretch-i386
+      xenial_i386:
+        target: xenial-i386
+      # 64-bit ARM
+      amazonlinux2_aarch64:
+        target: amazonlinux2-aarch64
+      bionic_arm64:
+        target: bionic-arm64
+      buster_arm64:
+        target: buster-arm64
+      centos7_aarch64:
+        target: centos7-aarch64
+      centos8_aarch64:
+        target: centos8-aarch64
+      focal_arm64:
+        target: focal-arm64
+      opensuse_leap15_aarch64:
+        target: opensuse.leap15-aarch64
+      stretch_arm64:
+        target: stretch-arm64
+      xenial_arm64:
+        target: xenial-arm64
+      # 32-bit ARM
+      bionic_armhf:
+        target: bionic-armhf
+      buster_armel:
+        target: buster-armel
+      buster_armhf:
+        target: buster-armhf
+      stretch_armel:
+        target: stretch-armel
+      stretch_armhf:
+        target: stretch-armhf
+      xenial_armhf:
+        target: xenial-armhf
+      # PPC
+      bionic_ppc64le:
+        target: bionic-ppc64le
+      buster_ppc64le:
+        target: buster-ppc64le
+      centos7_ppc64le:
+        target: centos7-ppc64le
+      centos8_ppc64le:
+        target: centos8-ppc64le
+      focal_ppc64le:
+        target: focal-ppc64le
+      opensuse_leap15_ppc64le:
+        target: opensuse.leap15-ppc64le
+      stretch_ppc64le:
+        target: stretch-ppc64le
+      xenial_ppc64le:
+        target: xenial-ppc64le
   timeoutInMinutes: 0
   steps:
   - script: |
@@ -76,6 +137,8 @@ jobs:
     name: 'docker'
   strategy:
     matrix:
+      stretch_raspberrypi:
+        target: raspberrypi.stretch-armhf
       buster_raspberrypi:
         target: raspberrypi.buster-armhf
   timeoutInMinutes: 0
