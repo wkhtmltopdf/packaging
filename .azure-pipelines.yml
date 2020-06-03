@@ -1,7 +1,7 @@
 # variables used in the build
 variables:
   checkout: master
-  packaging_tag: 0.12.6-dev
+  packaging_tag: 0.12.6-rc
   iteration: '1'
   pre_release: true
   draft: true
