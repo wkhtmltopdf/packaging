@@ -18,9 +18,10 @@ Vagrant.configure(2) do |config|
         cfg.vm.box_version = "0.0.1"
         cfg.vm.synced_folder ".", "/vagrant", disabled: true
         cfg.vm.provision     "shell", inline: %{
-easy_install pip
-pip install conan --ignore-installed six
-su vagrant -c 'brew install cmake rsync'
+su vagrant -c 'brew update'
+su vagrant -c 'brew install cmake rsync conan python3'
+su vagrant -c 'pip3 install pyyaml'
+ln -s /usr/local/bin/python3 /usr/local/bin/python
 su vagrant -c 'echo "source /etc/profile">~/.bashrc'
 su vagrant -c 'echo "export MACOSX_DEPLOYMENT_TARGET=10.7">>~/.bashrc'
 gem install fpm --no-ri --no-rdoc

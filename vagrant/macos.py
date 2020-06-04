@@ -2,8 +2,8 @@
 def prepare_build(config, target, build_dir, src_dir):
     import os
     qmake = ''
-    for var in ('CFLAGS', 'CXXFLAGS'):
-        os.environ[var] = '-w'
+    for var in ('CFLAGS', 'CXXFLAGS', 'OBJECTIVE_CFLAGS'):
+        os.environ[var] = '-w -stdlib=libc++ -mmacosx-version-min=10.7'
         qmake += '"QMAKE_%s+=-fvisibility=hidden -fvisibility-inlines-hidden" ' % var
     return '--prefix=%s' % os.path.join(build_dir, 'qt'), qmake
 

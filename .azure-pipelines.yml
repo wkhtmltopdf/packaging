@@ -205,3 +205,40 @@ jobs:
       assetUploadMode: replace
       assets: |
         *.exe
+- job: 'macos'
+  pool:
+    vmImage: 'macOS-10.15'
+  strategy:
+    matrix:
+      cocoa:
+        target: macos-cocoa
+  timeoutInMinutes: 0
+  steps:
+  - script: |
+      brew install conan
+      pip3 install pyyaml
+      sudo gem install fpm
+      sudo xcode-select --switch /Library/Developer/CommandLineTools
+    displayName: 'install dependencies'
+  - script: |
+      git clone --recurse-submodules https://github.com/wkhtmltopdf/wkhtmltopdf.git
+      cd wkhtmltopdf && git checkout $(checkout) && git submodule update
+      sed -i -e 's/CFLAGS CXXFLAGS LDFLAGS/CFLAGS CXXFLAGS OBJECTIVE_CFLAGS LDFLAGS/g' qt/configure
+    displayName: 'clone wkhtmltopdf'
+  - script: python3 build vagrant $(target) --version - - --iteration $(iteration) wkhtmltopdf
+    displayName: 'build package'
+  - task: GithubRelease@0
+    displayName: 'upload package'
+    inputs:
+      gitHubConnection: github_ashkulz
+      repositoryName: wkhtmltopdf/packaging
+      action: edit
+      target: '$(Build.SourceVersion)'
+      tagSource: manual
+      tag: '$(packaging_tag)'
+      isDraft: '$(draft)'
+      isPreRelease: '$(pre_release)'
+      addChangeLog: false
+      assetUploadMode: replace
+      assets: |
+        *.pkg
