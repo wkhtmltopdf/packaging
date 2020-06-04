@@ -141,6 +141,8 @@ jobs:
         target: buster-armhf
       buster_raspberrypi:
         target: raspberrypi.buster-armhf
+      focal_armhf:
+        target: focal-armhf
   timeoutInMinutes: 0
   steps:
   - script: |

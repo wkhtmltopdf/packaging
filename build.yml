@@ -114,7 +114,7 @@ docker-targets:
       from: ubuntu:focal
       jpeg: libjpeg-turbo8-dev
     output: deb
-    matrix: ['amd64', 'arm64', 'ppc64le']
+    matrix: ['amd64', 'arm64', 'armhf', 'ppc64le']
     depend: >
       ca-certificates
       fontconfig
