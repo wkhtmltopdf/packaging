@@ -75,12 +75,6 @@ jobs:
       # 32-bit ARM
       stretch_raspberrypi:
         target: raspberrypi.stretch-armhf
-      stretch_armel:
-        target: stretch-armel
-      stretch_armhf:
-        target: stretch-armhf
-      xenial_armhf:
-        target: xenial-armhf
       # PPC
       bionic_ppc64le:
         target: bionic-ppc64le
@@ -88,16 +82,10 @@ jobs:
         target: buster-ppc64le
       centos7_ppc64le:
         target: centos7-ppc64le
-      centos8_ppc64le:
-        target: centos8-ppc64le
       focal_ppc64le:
         target: focal-ppc64le
       opensuse_leap15_ppc64le:
         target: opensuse.leap15-ppc64le
-      stretch_ppc64le:
-        target: stretch-ppc64le
-      xenial_ppc64le:
-        target: xenial-ppc64le
   timeoutInMinutes: 0
   steps:
   - script: |
@@ -133,16 +121,10 @@ jobs:
     name: 'docker'
   strategy:
     matrix:
-      bionic_armhf:
-        target: bionic-armhf
-      buster_armel:
-        target: buster-armel
-      buster_armhf:
-        target: buster-armhf
       buster_raspberrypi:
         target: raspberrypi.buster-armhf
-      focal_armhf:
-        target: focal-armhf
+      centos8_ppc64le:
+        target: centos8-ppc64le
   timeoutInMinutes: 0
   steps:
   - script: |
