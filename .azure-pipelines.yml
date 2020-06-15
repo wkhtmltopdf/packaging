@@ -1,10 +1,10 @@
 # variables used in the build
 variables:
-  checkout: master
-  packaging_tag: 0.12.7-dev
-  iteration: '1'
-  pre_release: true
-  draft: true
+  checkout: 0.12.6
+  packaging_tag: 0.12.6-2
+  iteration: '2'
+  pre_release: false
+  draft: false
 
 # package builds will always be manually triggered
 trigger: none
@@ -87,6 +87,7 @@ jobs:
       opensuse_leap15_ppc64le:
         target: opensuse.leap15-ppc64le
   timeoutInMinutes: 0
+  condition: eq(1, 2)
   steps:
   - script: |
       echo '{ "experimental": true }' | sudo tee /etc/docker/daemon.json
@@ -126,6 +127,7 @@ jobs:
       centos8_ppc64le:
         target: centos8-ppc64le
   timeoutInMinutes: 0
+  condition: eq(1, 2)
   steps:
   - script: |
       rm -fr wkhtmltopdf targets && git clone --recurse-submodules https://github.com/wkhtmltopdf/wkhtmltopdf.git
@@ -160,6 +162,7 @@ jobs:
       win32:
         target: msvc2015-win32
   timeoutInMinutes: 0
+  condition: eq(1, 2)
   steps:
   - script: |
       choco install -yr --no-progress vcbuildtools -ia "/Full"
