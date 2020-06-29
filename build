@@ -185,7 +185,6 @@ def build_vagrant(config, target, src_dir, iteration, clean=False, debug=False, 
     vm   = cfg['vm']
     base = '%s/%s' % (cfg['home_in_rsync'], target)
 
-    src_dir = os.path.abspath(src_dir)
     tgt_dir = os.path.abspath('./targets' if no_version_specified else '../build')
     if not os.path.exists(tgt_dir):
         os.makedirs(tgt_dir)
@@ -203,7 +202,7 @@ def build_vagrant(config, target, src_dir, iteration, clean=False, debug=False, 
         shell('vagrant ssh-config %s > .vagrant/%s_config' % (vm, vm), 'vagrant')
 
         def rsync(flags, src, tgt):
-            shell('rsync --info=progress2 -a -e "ssh -F vagrant/.vagrant/%s_config" %s %s/ %s:%s/%s' % (vm, flags, os.path.abspath(src), vm, base, tgt))
+            shell('rsync --info=progress2 -a -e "ssh -F vagrant/.vagrant/%s_config" %s %s/ %s:%s/%s' % (vm, flags, src, vm, base, tgt))
 
         shell('ssh -F vagrant/.vagrant/%s_config %s -- "bash -c \'mkdir -p %s\'"' % (vm, vm, base))
         rsync('--delete --exclude .git',    src_dir, 'src')
@@ -238,7 +237,7 @@ def build_vagrant(config, target, src_dir, iteration, clean=False, debug=False, 
                 os.makedirs(os.path.join(tgt_dir, d))
         if not os.path.exists(os.path.join(tgt_dir, 'qt_configured')):
             shell('%s %s %s %s %s %s %s' % (
-                os.path.join(src_dir, 'qt', 'configure'),
+                os.path.join(os.path.abspath(src_dir), 'qt', 'configure'),
                 config['qt-config']['common'].strip(),
                 config['qt-config'][cfg['qt_config']].strip(),
                 config['qt-config']['debug'].strip() if debug else '',
@@ -250,7 +249,7 @@ def build_vagrant(config, target, src_dir, iteration, clean=False, debug=False, 
         make  = cfg.get('make', 'make -j%d' % multiprocessing.cpu_count())
         qmake = os.path.join(tgt_dir, 'qt', 'bin', 'qmake')
         shell(make, os.path.join(tgt_dir, 'qt'))
-        shell('%s %s/wkhtmltopdf.pro CONFIG+=silent %s' % (qmake, src_dir, custom_qmk), os.path.join(tgt_dir, 'app'))
+        shell('%s %s/wkhtmltopdf.pro CONFIG+=silent %s' % (qmake, os.path.abspath(src_dir), custom_qmk), os.path.join(tgt_dir, 'app'))
         shell(make, os.path.join(tgt_dir, 'app'))
         if not debug:
             custom.package_build(config, target, tgt_dir, src_dir, version)
