@@ -269,6 +269,28 @@ docker-targets:
       xorg-x11-fonts-Type1
       zlib
 
+  archlinux:
+    source: docker/Dockerfile.archlinux
+    args:
+      from: archlinux:latest
+    output: pacman
+    matrix: ['amd64']
+    depend: >
+      ca-certificates
+      fontconfig
+      freetype2
+      glibc
+      libjpeg
+      libpng
+      libstdc++5
+      libx11
+      libxext
+      libxrender
+      openssl
+      xorg-fonts-75dpi
+      xorg-fonts-type1
+      zlib
+
   amazonlinux2:
     source: docker/Dockerfile.centos
     args:
