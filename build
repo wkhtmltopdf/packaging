@@ -160,6 +160,9 @@ def package_docker(config, target, src_dir, iteration, clean=False):
     elif output in ('rpm', 'rpm:bzip2'):
         frpm = '-t rpm --rpm-compression %s' % ('xz' if output == 'rpm' else 'bzip2')
         shell('docker run --rm -v%s:/tgt -w/tgt %s %s' % (os.path.abspath('targets'), fpm_args, frpm))
+    elif output in ('pacman'):
+        fpacman = '-t pacman'
+        shell('docker run --rm -v%s:/tgt -w/tgt %s %s' % (os.path.abspath('targets'), fpm_args, fpacman))
 
     if clean:
         shell('rm -fr %s' % tgt_dir)
