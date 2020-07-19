@@ -276,20 +276,14 @@ docker-targets:
     output: pacman
     matrix: ['amd64']
     depend: >
-      ca-certificates
+      openssl
+      zlib
       fontconfig
       freetype2
-      glibc
       libjpeg
       libpng
-      libstdc++5
-      libx11
       libxext
       libxrender
-      openssl
-      xorg-fonts-75dpi
-      xorg-fonts-type1
-      zlib
 
   amazonlinux2:
     source: docker/Dockerfile.centos
@@ -537,4 +531,14 @@ fpm-params:
   maintainer:   Ashish Kulkarni <ashish@kulkarni.dev>
   url:          https://wkhtmltopdf.org/
   prefix:       /usr/local
+  category:     utils
+
+fpm-pacman-params:
+  name:         wkhtmltox
+  description:  convert HTML to PDF and various image formats using QtWebkit
+  license:      LGPLv3
+  vendor:       wkhtmltopdf
+  maintainer:   Ashish Kulkarni <ashish@kulkarni.dev>
+  url:          https://wkhtmltopdf.org/
+  prefix:       /usr
   category:     utils
