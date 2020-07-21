@@ -143,12 +143,9 @@ def package_docker(config, target, src_dir, iteration, clean=False):
     dimage   = '-e XZ_OPT=-9 --user %d:%d %s' % (os.getuid(), os.getgid(), config['fpm-image'])
     fversion = '--epoch 1 --version "%s" --iteration "%s.%s"' % (pkg_ver, pkg_iter, target.split('-')[0])
     fparams  = ' '.join('--%s "%s"' % (k, v) for k, v in config['fpm-params'].items())
-    fparams_pacman  = ' '.join('--%s "%s"' % (k, v) for k, v in config['fpm-pacman-params'].items())
     fdepend  = ' '.join('--depends "%s"' % p for p in depend.split() if p).strip()
     fpm_args = '%s -a %s -f -s dir -C %s/wkhtmltox %s %s %s' % (
         dimage, arch, target, fversion, fparams, fdepend)
-    fpm_pacman_args = '%s -a %s -f -s dir -C %s/wkhtmltox %s %s %s' % (
-        dimage, arch, target, fversion, fparams_pacman, fdepend)
     archive  = 'wkhtmltox-%s-%s.%s' % (pkg_ver, pkg_iter, target)
 
     if output == 'tar':
@@ -164,8 +161,8 @@ def package_docker(config, target, src_dir, iteration, clean=False):
         frpm = '-t rpm --rpm-compression %s' % ('xz' if output == 'rpm' else 'bzip2')
         shell('docker run --rm -v%s:/tgt -w/tgt %s %s' % (os.path.abspath('targets'), fpm_args, frpm))
     elif output in ('pacman'):
-        fpacman = '-t pacman'
-        shell('docker run --rm -v%s:/tgt -w/tgt %s %s' % (os.path.abspath('targets'), fpm_pacman_args, fpacman))
+        fpacman = '-t pacman --prefix /usr'
+        shell('docker run --rm -v%s:/tgt -w/tgt %s %s' % (os.path.abspath('targets'), fpm_args, fpacman))
 
     if clean:
         shell('rm -fr %s' % tgt_dir)

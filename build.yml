@@ -532,13 +532,3 @@ fpm-params:
   url:          https://wkhtmltopdf.org/
   prefix:       /usr/local
   category:     utils
-
-fpm-pacman-params:
-  name:         wkhtmltox
-  description:  convert HTML to PDF and various image formats using QtWebkit
-  license:      LGPLv3
-  vendor:       wkhtmltopdf
-  maintainer:   Ashish Kulkarni <ashish@kulkarni.dev>
-  url:          https://wkhtmltopdf.org/
-  prefix:       /usr
-  category:     utils
