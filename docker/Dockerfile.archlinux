@@ -1,0 +1,22 @@
+ARG  from
+FROM ${from}
+
+ENV  CFLAGS=-w CXXFLAGS=-w
+WORKDIR /root/
+RUN curl -o gcc-lib.pkg.tar.xz https://archive.archlinux.org/packages/g/gcc7-libs/gcc7-libs-7.4.1%2B20181207-3-x86_64.pkg.tar.xz && \
+      curl -o gcc.pkg.tar.xz https://archive.archlinux.org/packages/g/gcc7/gcc7-7.4.1%2B20181207-3-x86_64.pkg.tar.xz && \
+      pacman -Sy --noconfirm \
+      diffutils \
+      fontconfig \
+      freetype2 \
+      libx11 \
+      libxext \
+      libxrender \
+      libjpeg-turbo \
+      libpng \
+      make && \
+      pacman -U /root/gcc.pkg.tar.xz /root/gcc-lib.pkg.tar.xz --noconfirm && \
+      pacman -Scc --noconfirm
+RUN ln -s /usr/bin/gcc-7 /usr/bin/gcc && \
+      ln -s /usr/bin/g++-7 /usr/bin/g++
+
