@@ -118,6 +118,7 @@ jobs:
         targets/*.deb
         targets/*.rpm
         targets/*.7z
+        targets/*.xz
 - job: 'self_hosted'
   pool:
     name: 'docker'
