@@ -36,6 +36,8 @@ jobs:
         target: amazonlinux2-x86_64
       opensuse_leap15_x86_64:
         target: opensuse.leap15-x86_64
+      archlinux_amd64:
+        target: archlinux-amd64
       mxe_win32:
         target: mxe-cross-win32
       mxe_win64:
