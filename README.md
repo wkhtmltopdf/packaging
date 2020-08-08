@@ -82,7 +82,7 @@ Porting
 It's best if you can get the distribution/OS to support wkhtmltopdf with
 patched Qt, as it would enable using the native package management tools.
 
-Failing this, please open an issue for adding support for a differnt target.
+Failing this, please open an issue for adding support for a different target.
 In case your target also requires patches to Qt, make sure to submit and get
 them merged before opening a PR for packaging the target.
 
