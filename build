@@ -110,6 +110,9 @@ def compile_docker(config, target, src_dir, tgt_dir, debug=False):
     def dshell(wd, cmd):
         shell('docker run --rm -v%s:/src -v%s:/tgt -w%s %s %s' % (
             os.path.abspath(src_dir), os.path.abspath(tgt_dir), wd, dimage, cmd))
+    def dscript(wd, script):
+        shell('docker run --rm -v%s:/src -v%s:/tgt -v%s:/postcompile.sh -w%s %s /postcompile.sh' % (
+            os.path.abspath(src_dir), os.path.abspath(tgt_dir), script, wd, dimage))
 
     if not os.path.exists(os.path.join(tgt_dir, 'qt_configured')):
         qtconf = config['docker-targets'][target].get('qt_config', 'docker')
@@ -128,14 +131,10 @@ def compile_docker(config, target, src_dir, tgt_dir, debug=False):
     dshell('/tgt/app', '/tgt/qt/bin/qmake /src/wkhtmltopdf.pro CONFIG+=silent')
     dshell('/tgt/app', 'make install INSTALL_ROOT=/tgt/wkhtmltox')
 
-    output  = config['docker-targets'][target].get('output', '')
-    if output == 'lambda':
-        libs = config['docker-targets'][target].get('libs', '')
-        dshell('/tgt/app', 'bash -c "ls /usr/lib64/{%s} 2> /dev/null | xargs cp -t /tgt/wkhtmltox/lib/"' % ','.join(p + '.so.?,' + p + '.so.??' for p in libs.split() if p))
-        dshell('/tgt/app', 'bash -c "cp -r /usr/share/fonts /tgt/wkhtmltox/"')
-        dshell('/tgt/app', 'bash -c "cp /etc/fonts/fonts.conf /tgt/wkhtmltox/fonts/"')
-
-
+    postcompile = config['docker-targets'][target].get('postcompile', '')
+    script = os.path.abspath('scripts/%s.postcompile.sh' % postcompile)
+    if os.path.exists(script):
+        dscript('/tgt/app', script)
 
 def package_docker(config, target, src_dir, iteration, clean=False):
     tgt_dir = os.path.join('targets', target)
@@ -173,11 +172,9 @@ def package_docker(config, target, src_dir, iteration, clean=False):
         fpacman = '-t pacman'
         fpm_args = fpm_args.replace('/usr/local', '/usr')
         shell('docker run --rm -v%s:/tgt -w/tgt %s %s' % (os.path.abspath('targets'), fpm_args, fpacman))
-    elif output == 'lambda':
-        shell('rm -f targets/%s.7z' % archive)
-        shell('rm -rf targets/%s/wkhtmltox/include' % target)
-        shell('rm -rf targets/%s/wkhtmltox/share' % target)
-        shell('cd targets/%s && 7z a ../%s.7z -mx9 wkhtmltox/' % (target, archive))
+    elif output == 'zip':
+        shell('rm -f targets/%s.zip' % archive)
+        shell('cd targets/%s && zip -r ../%s.zip wkhtmltox' % (target, archive))
 
     if clean:
         shell('rm -fr %s' % tgt_dir)

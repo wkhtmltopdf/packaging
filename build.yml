@@ -311,7 +311,8 @@ docker-targets:
     source: docker/Dockerfile.centos
     args:
       from: amazonlinux:2
-    output: lambda
+    output: zip
+    postcompile: aws-lambda
     matrix: ['x86_64']
     depend: >
       ca-certificates
@@ -328,16 +329,6 @@ docker-targets:
       xorg-x11-fonts-75dpi
       xorg-x11-fonts-Type1
       zlib
-    libs: >
-      libjpeg
-      libpng15
-      libXrender
-      libfontconfig
-      libfreetype
-      libXext
-      libX11
-      libxcb
-      libXau
 
   opensuse.leap15:
     source: docker/Dockerfile.opensuse
