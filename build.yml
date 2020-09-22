@@ -311,7 +311,7 @@ docker-targets:
     source: docker/Dockerfile.centos
     args:
       from: amazonlinux:2
-    output: zip
+    output: lambda_zip
     after_compile: amazonlinux2_lambda
     arch: x86_64
 

@@ -168,7 +168,7 @@ def package_docker(config, target, src_dir, iteration, clean=False):
         fpacman = '-t pacman'
         fpm_args = fpm_args.replace('/usr/local', '/usr')
         shell('docker run --rm -v%s:/tgt -w/tgt %s %s' % (os.path.abspath('targets'), fpm_args, fpacman))
-    elif output == 'zip':
+    elif output == 'lambda_zip':
         shell('rm -f targets/%s.zip' % archive)
         shell('cd targets/%s/wkhtmltox && zip -r ../%s.zip *' % (target, archive))
 
