@@ -170,7 +170,7 @@ def package_docker(config, target, src_dir, iteration, clean=False):
         shell('docker run --rm -v%s:/tgt -w/tgt %s %s' % (os.path.abspath('targets'), fpm_args, fpacman))
     elif output == 'lambda_zip':
         shell('rm -f targets/%s.zip' % archive)
-        shell('cd targets/%s/wkhtmltox && zip -r ../%s.zip *' % (target, archive))
+        shell('cd targets/%s/wkhtmltox && zip -r ../../%s.zip *' % (target, archive))
 
     if clean:
         shell('rm -fr %s' % tgt_dir)

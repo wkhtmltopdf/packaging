@@ -121,6 +121,7 @@ jobs:
         targets/*.rpm
         targets/*.7z
         targets/*.xz
+        targets/*.zip
 - job: 'self_hosted'
   pool:
     name: 'docker'
