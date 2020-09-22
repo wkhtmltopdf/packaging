@@ -10,7 +10,8 @@ for lib in $(echo $libs); do
     echo ".*${lib}\.so\.[0-9]{1,2}" | xargs find /usr/lib64 -regextype posix-awk -regex | xargs cp -t /tgt/wkhtmltox/lib/
 done
 
-# To be able to generate pdf files we need a font. There is one (dejavu) in the complie docker image
+# To be able to create pdf files we need a font. 
+# There is one (dejavu) in the docker image used for compilation.
 cp -r /usr/share/fonts /tgt/wkhtmltox/
 cat >/tgt/wkhtmltox/fonts/fonts.conf <<EOL
 <?xml version="1.0"?>
