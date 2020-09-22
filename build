@@ -128,15 +128,9 @@ def compile_docker(config, target, src_dir, tgt_dir, debug=False):
     dshell('/tgt/app', '/tgt/qt/bin/qmake /src/wkhtmltopdf.pro CONFIG+=silent')
     dshell('/tgt/app', 'make install INSTALL_ROOT=/tgt/wkhtmltox')
 
-    aftercompile = config['docker-targets'][target].get('after_compile', '')
-    if aftercompile:
-        script = 'after_compile/%s.sh' % aftercompile
-        if not os.path.exists(os.path.abspath(script)):
-            message('The after_compile script doesn\'t exist: %s' %  script)
-            sys.exit(1)
-            
+    script = 'after_compile/%s.sh' % config['docker-targets'][target].get('after_compile', '')
+    if os.path.exists(os.path.abspath(script)):
         dshell('/tgt/app', '/pkg/%s' % script)
-        
 
 def package_docker(config, target, src_dir, iteration, clean=False):
     tgt_dir = os.path.join('targets', target)
