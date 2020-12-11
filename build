@@ -282,6 +282,10 @@ def main():
     parser = argparse.ArgumentParser(prog='build')
     sub    = parser.add_subparsers(title='TARGETS', metavar='<target>')
 
+    qemu = parser.add_mutually_exclusive_group()
+    qemu.add_argument('--no-qemu', action='store_true', default=False, help='don\'t use QEMU')
+    qemu.add_argument('--use-qemu', metavar='PLATFORM', help='use a specific QEMU platform on the host. The platform must be a "os/architecture(/variant)" value')
+
     docker = sub.add_parser('docker-images', help='build docker images')
     docker.add_argument('--force', action='store_true', default=False, help='force rebuild for all specified targets')
     docker.add_argument('targets', nargs='+', metavar='TARGET', help='targets for which to build images')
@@ -316,25 +320,34 @@ def main():
 
     cli  = sys.argv[1:] if len(sys.argv) > 1 else ['-h']
     args = vars(parser.parse_args(cli))
+    use_qemu = args.pop('use_qemu', None)
+    no_qemu = args.pop('no_qemu')
     func = args.pop('func')
     bdir = os.path.dirname(os.path.abspath(__file__))
     with open(os.path.join(bdir, 'build.yml'), 'r') as f:
         os.chdir(bdir)
         config = yaml.safe_load(f.read())
         # expand matrix into separate per-arch targets
-        for name in list(config['docker-targets'].keys()):
-            distro_arch = config['docker-targets'][name].get('matrix')
+        for name, target in list(config['docker-targets'].items()):
+            if 'qemu' in target and no_qemu:
+                del target['qemu']
+            if use_qemu is not None:
+                target['qemu'] = use_qemu
+            distro_arch = target.get('matrix')
             if not distro_arch:
                 continue
             for arch in distro_arch:
-                target = copy.deepcopy(config['docker-targets'][name])
-                del target['matrix']
-                target['arch'] = arch
-                target['platform'] = config['matrix-platforms'][arch]
-                if target['platform'] not in ('linux/amd64', 'linux/386'):
+                new_target = copy.deepcopy(target)
+                del new_target['matrix']
+                new_target['arch'] = arch
+                new_target['platform'] = config['matrix-platforms'][arch]
+                if use_qemu is not None:
+                    new_target['qemu'] = use_qemu
+                elif not no_qemu:
+                    # keep the old behavior for convienience
                     # workaround https://bugs.launchpad.net/qemu/+bug/1805913 for 32-bit targets
-                    target['qemu'] = 'linux/amd64' if target['platform'] not in ('linux/arm/v5', 'linux/arm/v7') else 'linux/386'
-                config['docker-targets']['%s-%s' % (name, arch)] = target
+                    new_target['qemu'] = 'linux/amd64' if new_target['platform'] not in ('linux/arm/v5', 'linux/arm/v7') else 'linux/386'
+                config['docker-targets']['%s-%s' % (name, arch)] = new_target
             del config['docker-targets'][name]
         func(config, **args)
 
