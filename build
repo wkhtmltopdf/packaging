@@ -322,8 +322,13 @@ def main():
     args = vars(parser.parse_args(cli))
     use_qemu = args.pop('use_qemu', None)
     no_qemu = args.pop('no_qemu')
-    func = args.pop('func')
+    func = args.pop('func', None)
     bdir = os.path.dirname(os.path.abspath(__file__))
+
+    if func is None:
+        parser.print_help()
+        exit(1)
+
     with open(os.path.join(bdir, 'build.yml'), 'r') as f:
         os.chdir(bdir)
         config = yaml.safe_load(f.read())
