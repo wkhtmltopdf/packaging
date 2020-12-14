@@ -36,6 +36,12 @@ If you're building for a non-default architecture, you may need to enable
 the `experimental: "true"` flag to enable `docker pull --platform`: see
 https://docs.docker.com/engine/reference/commandline/pull/#options
 
+By default, the build system assumes the host system runs on x86-64 GNU/Linux and it will use QEMU to emulate non-x86 platforms within Docker. If you are building on a non-x86 host, you can use the `--no-qemu` to disable QEMU entirely or `--use-qemu <PLATFORM>` to force the use of a specific build of QEMU for your platform. The platform argument follows the format `os/arch(/variant)`. For example:
+
+    $ ./build --use-qemu linux/arm64/v8 package-docker buster-amd64 <PATH-TO-WKHTMLTOPDF>
+
+to build an AMD64 package on a AArch64 host.
+
 Build System
 ============
 
