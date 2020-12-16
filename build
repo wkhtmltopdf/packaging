@@ -47,9 +47,7 @@ def docker_images(config, targets, force):
             if output('docker version --format "{{.Server.Experimental}}"') != 'true':
                 message('Could not detect experimental: true in docker daemon, aborting.')
                 sys.exit(1)
-            shell('docker pull --platform %s %s' % (platform or 'linux/amd64', image))
-        else:
-            shell('docker pull %s' % image)
+        shell('docker pull --platform %s %s' % (platform or 'linux/amd64', image))
 
     started_qemu = None
     for name in targets:
