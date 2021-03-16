@@ -49,9 +49,11 @@ jobs:
     displayName: 'Use NuGet '
   - task: NuGetCommand@2
     condition: and(succeeded(), ne(variables['Build.Reason'],'PullRequest'))
+    displayName: 'NuGet pack'
     inputs:
       command: pack
       packagesToPack: '$(System.ArtifactStagingDirectory)/publish/wkhtmltopdf.msvc.exe.nuspec'
+      packDestination: '$(Build.ArtifactStagingDirectory)/release'
       versioningScheme: byEnvVar
       versionEnvVar: releaseVersion
   - task: NuGetCommand@2
@@ -59,5 +61,6 @@ jobs:
     displayName: 'NuGet push'
     inputs:
       command: push
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/release/*.nupkg'
       publishVstsFeed: '32d1fdf2-56bc-43a3-b791-1f00f9d3ead8'
       allowPackageConflicts: true

@@ -28,6 +28,6 @@ wkhtmltopdf.exe -H
     </metadata>
     <files>
         <file src="install.ps1" target="tools/install.ps1" />
-        <file src="wkhtmltopdf.exe" target="tools/wkhtmltopdf.exe" />
+        <file src="targets/wkhtmltox/bin/wkhtmltopdf.exe" target="tools/wkhtmltopdf.exe" />
     </files>
 </package>
