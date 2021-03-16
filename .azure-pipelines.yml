@@ -1,7 +1,6 @@
 # variables used in the build
 variables:
   checkout: master
-  packaging_tag: 0.12.7-dev
   iteration: '1'
 
 # package builds will always be manually triggered
@@ -35,3 +34,26 @@ jobs:
       PathtoPublish: '$(System.DefaultWorkingDirectory)/targets/wkhtmltox/bin/wkhtmltopdf.exe'
       ArtifactName: 'drop'
       publishLocation: 'Container'
+  - task: CopyFiles@2
+    condition: and(succeeded(), ne(variables['Build.Reason'],'PullRequest'))
+    displayName: 'Copy files from $(System.DefaultWorkingDirectory)/targets/wkhtmltox/bin/wkhtmltopdf.exe to $(Build.ArtifactStagingDirectory)/publish'
+    inputs:
+      Contents: |
+        '$(System.DefaultWorkingDirectory)/targets/wkhtmltox/bin/wkhtmltopdf.exe'
+        '$(System.DefaultWorkingDirectory)/install.ps1'
+        '$(System.DefaultWorkingDirectory)/wkhtmltopdf.msvc.exe.nuspec'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/publish'
+  - task: NuGetToolInstaller@1
+    displayName: 'Use NuGet '
+  - task: NuGetCommand@2
+    inputs:
+      command: pack
+      packagesToPack: '$(System.DefaultWorkingDirectory)/wkhtmltopdf.msvc.exe.nuspec'
+      versioningScheme: byEnvVar
+      versionEnvVar: '$(releaseVersion)'
+  - task: NuGetCommand@2
+    displayName: 'NuGet push'
+    inputs:
+      command: push
+      publishVstsFeed: '32d1fdf2-56bc-43a3-b791-1f00f9d3ead8'
+      allowPackageConflicts: true
