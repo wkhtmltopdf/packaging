@@ -36,12 +36,13 @@ jobs:
       publishLocation: 'Container'
   - task: CopyFiles@2
     condition: and(succeeded(), ne(variables['Build.Reason'],'PullRequest'))
-    displayName: 'Copy files from $(System.DefaultWorkingDirectory)/targets/wkhtmltox/bin/wkhtmltopdf.exe to $(Build.ArtifactStagingDirectory)/publish'
+    displayName: 'Copy files to $(Build.ArtifactStagingDirectory)/publish'
     inputs:
+      SourceFolder: '$(System.DefaultWorkingDirectory)'
       Contents: |
-        targets/wkhtmltox/bin/wkhtmltopdf.exe'
-        install.ps1'
-        wkhtmltopdf.msvc.exe.nuspec'
+        targets/wkhtmltox/bin/wkhtmltopdf.exe
+        install.ps1
+        wkhtmltopdf.msvc.exe.nuspec
       TargetFolder: '$(Build.ArtifactStagingDirectory)/publish'
   - task: NuGetToolInstaller@1
     condition: and(succeeded(), ne(variables['Build.Reason'],'PullRequest'))
