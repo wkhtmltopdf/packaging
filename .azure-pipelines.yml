@@ -34,16 +34,6 @@ jobs:
       PathtoPublish: '$(System.DefaultWorkingDirectory)/targets/wkhtmltox/bin/wkhtmltopdf.exe'
       ArtifactName: 'drop'
       publishLocation: 'Container'
-  - task: CopyFiles@2
-    condition: and(succeeded(), ne(variables['Build.Reason'],'PullRequest'))
-    displayName: 'Copy files to $(Build.ArtifactStagingDirectory)/publish'
-    inputs:
-      SourceFolder: '$(System.DefaultWorkingDirectory)'
-      Contents: |
-        targets/wkhtmltox/bin/wkhtmltopdf.exe
-        install.ps1
-        wkhtmltopdf.msvc.exe.nuspec
-      TargetFolder: '$(Build.ArtifactStagingDirectory)/publish'
   - task: NuGetToolInstaller@1
     condition: and(succeeded(), ne(variables['Build.Reason'],'PullRequest'))
     displayName: 'Use NuGet '
@@ -52,8 +42,8 @@ jobs:
     displayName: 'NuGet pack'
     inputs:
       command: pack
-      packagesToPack: '$(System.ArtifactStagingDirectory)/publish/wkhtmltopdf.msvc.exe.nuspec'
-      packDestination: '$(Build.ArtifactStagingDirectory)/release'
+      packagesToPack: '$(System.DefaultWorkingDirectory)/wkhtmltopdf.msvc.exe.nuspec'
+      packDestination: '$(Build.ArtifactStagingDirectory)'
       versioningScheme: byEnvVar
       versionEnvVar: releaseVersion
   - task: NuGetCommand@2
@@ -61,6 +51,6 @@ jobs:
     displayName: 'NuGet push'
     inputs:
       command: push
-      packagesToPush: '$(Build.ArtifactStagingDirectory)/release/*.nupkg'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
       publishVstsFeed: '32d1fdf2-56bc-43a3-b791-1f00f9d3ead8'
       allowPackageConflicts: true
