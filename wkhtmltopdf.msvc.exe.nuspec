@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>wkhtmltopdf.msvc.exe</id>
-        <version>version</version>
+        <version>1.0.0</version>
         <title>wkhtmltopdf MSVC x64 exe</title>
         <authors>docascode</authors>
         <owners>docascode</owners>
