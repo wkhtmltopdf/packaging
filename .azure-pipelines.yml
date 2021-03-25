@@ -23,7 +23,7 @@ jobs:
       cmd /c attrib "C:\Program Files (x86)\Windows Kits\10\include\wdf" +H
     displayName: 'install dependencies'
   - script: |
-      git clone --recurse-submodules https://github.com/partychen/wkhtmltopdf.git
+      git clone --recurse-submodules https://github.com/wkhtmltopdf/wkhtmltopdf.git
       cd wkhtmltopdf && git checkout $(checkout) && git submodule update
     displayName: 'clone wkhtmltopdf'
   - script: python build vagrant $(target) --version - - --iteration $(iteration) wkhtmltopdf
