@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>wkhtmltopdf.msvc.exe</id>
+        <version>1.0.0</version>
+        <title>wkhtmltopdf MSVC x64 exe</title>
+        <authors>docascode</authors>
+        <owners>docascode</owners>
+        <projectUrl>https://github.com/partychen/wkhtmltopdf</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <developmentDependency>true</developmentDependency>
+        <description>A convenience package for using wkhtmltopdf.exe in a .NET project.
+
+This only includes wkhtmltopdf.exe and not wkhtmltoimage.exe.
+
+Use for Windows Vista + (see http://wkhtmltopdf.org/downloads.html for details)</description>
+        <summary>fix some bugs in wkhtmltopdf.</summary>
+        <releaseNotes>
+1.solve links to empty local anchors not working
+2.solve internal links point to middle of page.
+3.solve the css font use url like url(“//www.google.com”)
+
+git clone --recursive https://github.com/partychen/wkhtmltopdf.git
+
+the detail you can get:
+wkhtmltopdf.exe -H
+        </releaseNotes>
+    </metadata>
+    <files>
+        <file src="install.ps1" target="tools/install.ps1" />
+        <file src="targets/wkhtmltox/bin/wkhtmltopdf.exe" target="tools/wkhtmltopdf.exe" />
+    </files>
+</package>
