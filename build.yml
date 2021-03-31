@@ -156,6 +156,16 @@ docker-targets:
       xfonts-base
       zlib1g
 
+  gcp:
+    source: docker/Dockerfile.debian
+    args:
+      from: ubuntu:bionic
+      jpeg: libjpeg-turbo8-dev
+    output: lambda_zip
+    matrix: ['amd64']
+    after_compile: gcp_cloud_function
+    arch: amd64
+
   xenial:
     source: docker/Dockerfile.debian
     args:
