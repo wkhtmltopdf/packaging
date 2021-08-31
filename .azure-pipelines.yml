@@ -82,16 +82,16 @@ jobs:
       buster_raspberrypi:
         target: raspberrypi.buster-armhf
       # PPC
-      bionic_ppc64le:
-        target: bionic-ppc64le
-      buster_ppc64le:
-        target: buster-ppc64le
+      bionic_ppc64el:
+        target: bionic-ppc64el
+      buster_ppc64el:
+        target: buster-ppc64el
       centos7_ppc64le:
         target: centos7-ppc64le
       centos8_ppc64le:
         target: centos8-ppc64le
-      focal_ppc64le:
-        target: focal-ppc64le
+      focal_ppc64el:
+        target: focal-ppc64el
       opensuse_leap15_ppc64le:
         target: opensuse.leap15-ppc64le
   timeoutInMinutes: 0
