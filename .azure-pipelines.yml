@@ -79,6 +79,8 @@ jobs:
       # 32-bit ARM
       stretch_raspberrypi:
         target: raspberrypi.stretch-armhf
+      buster_raspberrypi:
+        target: raspberrypi.buster-armhf
       # PPC
       bionic_ppc64le:
         target: bionic-ppc64le
@@ -86,6 +88,8 @@ jobs:
         target: buster-ppc64le
       centos7_ppc64le:
         target: centos7-ppc64le
+      centos8_ppc64le:
+        target: centos8-ppc64le
       focal_ppc64le:
         target: focal-ppc64le
       opensuse_leap15_ppc64le:
@@ -122,40 +126,6 @@ jobs:
         targets/*.7z
         targets/*.xz
         targets/*.zip
-- job: 'self_hosted'
-  pool:
-    name: 'docker'
-  strategy:
-    matrix:
-      buster_raspberrypi:
-        target: raspberrypi.buster-armhf
-      centos8_ppc64le:
-        target: centos8-ppc64le
-  timeoutInMinutes: 0
-  steps:
-  - script: |
-      rm -fr wkhtmltopdf targets && git clone --recurse-submodules https://github.com/wkhtmltopdf/wkhtmltopdf.git
-      cd wkhtmltopdf && git checkout $(checkout) && git submodule update
-    displayName: 'clone wkhtmltopdf'
-  - script: python build package-docker --clean --iteration $(iteration) $(target) wkhtmltopdf
-    displayName: 'build package'
-  - task: GithubRelease@0
-    displayName: 'upload package'
-    inputs:
-      gitHubConnection: github_ashkulz
-      repositoryName: wkhtmltopdf/packaging
-      action: edit
-      target: '$(Build.SourceVersion)'
-      tagSource: manual
-      tag: '$(packaging_tag)'
-      isDraft: '$(draft)'
-      isPreRelease: '$(pre_release)'
-      addChangeLog: false
-      assetUploadMode: replace
-      assets: |
-        targets/*.deb
-        targets/*.rpm
-        targets/*.7z
 - job: 'msvc2015'
   pool:
     vmImage: 'vs2017-win2016'
