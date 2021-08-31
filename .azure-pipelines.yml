@@ -16,6 +16,8 @@ jobs:
   strategy:
     matrix:
       # 64-bit x86
+      bullseye_amd64:
+        target: bullseye-amd64
       buster_amd64:
         target: buster-amd64
       focal_amd64:
@@ -43,6 +45,8 @@ jobs:
       # 32-bit x86
       bionic_i386:
         target: bionic-i386
+      bullseye_i386:
+        target: bullseye-i386
       buster_i386:
         target: buster-i386
       centos6_i686:
@@ -54,6 +58,8 @@ jobs:
         target: amazonlinux2-aarch64
       bionic_arm64:
         target: bionic-arm64
+      bullseye_arm64:
+        target: bullseye-arm64
       buster_arm64:
         target: buster-arm64
       centos7_aarch64:
@@ -64,12 +70,16 @@ jobs:
         target: focal-arm64
       opensuse_leap15_aarch64:
         target: opensuse.leap15-aarch64
-      # 32-bit ARM
+      # Raspbian
       buster_raspberrypi:
         target: raspberrypi.buster-armhf
+      bullseye_raspberrypi:
+        target: raspberrypi.bullseye-armhf
       # PPC
       bionic_ppc64el:
         target: bionic-ppc64el
+      bullseye_ppc64el:
+        target: bullseye-ppc64el
       buster_ppc64el:
         target: buster-ppc64el
       centos7_ppc64le:
