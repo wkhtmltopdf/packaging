@@ -224,51 +224,6 @@ docker-targets:
       xorg-x11-fonts-Type1
       zlib
 
-  centos6-x86_64:
-    source: docker/Dockerfile.centos
-    args:
-      from: centos:6
-    output: rpm
-    arch:   x86_64
-    depend: >
-      ca-certificates
-      fontconfig
-      freetype
-      glibc
-      libjpeg
-      libpng
-      libstdc++
-      libX11
-      libXext
-      libXrender
-      openssl
-      xorg-x11-fonts-75dpi
-      xorg-x11-fonts-Type1
-      zlib
-
-  centos6-i686:
-    source: docker/Dockerfile.centos6-i686
-    args:
-      from: centos:6
-    output: rpm
-    arch:   i686
-    platform: linux/386
-    depend: >
-      ca-certificates
-      fontconfig
-      freetype
-      glibc
-      libjpeg
-      libpng
-      libstdc++
-      libX11
-      libXext
-      libXrender
-      openssl
-      xorg-x11-fonts-75dpi
-      xorg-x11-fonts-Type1
-      zlib
-
   archlinux:
     source: docker/Dockerfile.archlinux
     args:

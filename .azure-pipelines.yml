@@ -26,8 +26,6 @@ jobs:
         target: centos8-x86_64
       centos7_x86_64:
         target: centos7-x86_64
-      centos6_x86_64:
-        target: centos6-x86_64
       amazonlinux2_x86_64:
         target: amazonlinux2-x86_64
       amazonlinux2_lambda:
@@ -45,8 +43,6 @@ jobs:
         target: bionic-i386
       buster_i386:
         target: buster-i386
-      centos6_i686:
-        target: centos6-i686
       centos7_i686:
         target: centos7-i686
       # 64-bit ARM
