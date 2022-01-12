@@ -29,7 +29,7 @@ jobs:
       amazonlinux2_x86_64:
         target: amazonlinux2-x86_64
       amazonlinux2_lambda:
-        target: amazonlinux2_lambda
+        target: amazonlinux2_lambda-x86_64
       opensuse_leap15_x86_64:
         target: opensuse.leap15-x86_64
       archlinux_amd64:
@@ -48,7 +48,7 @@ jobs:
       # 64-bit ARM
       amazonlinux2_aarch64:
         target: amazonlinux2-aarch64
-      amazonlinux2_lambda_arm64:
+      amazonlinux2_lambda_aarch64:
         target: amazonlinux2_lambda-aarch64
       bionic_arm64:
         target: bionic-arm64
