@@ -28,7 +28,7 @@ jobs:
         target: centos7-x86_64
       amazonlinux2_x86_64:
         target: amazonlinux2-x86_64
-      amazonlinux2_lambda:
+      amazonlinux2_lambda_x86_64:
         target: amazonlinux2_lambda-x86_64
       opensuse_leap15_x86_64:
         target: opensuse.leap15-x86_64
