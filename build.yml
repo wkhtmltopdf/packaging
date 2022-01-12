@@ -269,6 +269,14 @@ docker-targets:
     output: lambda_zip
     after_compile: amazonlinux2_lambda
     arch: x86_64
+  
+  amazonlinux2_lambda_arm64:
+    source: docker/Dockerfile.centos
+    args:
+      from: amazonlinux:2
+    output: lambda_zip
+    after_compile: amazonlinux2_lambda
+    arch: aarch64
 
   opensuse.leap15:
     source: docker/Dockerfile.opensuse
