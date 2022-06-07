@@ -180,6 +180,28 @@ docker-targets:
       xfonts-base
       zlib1g
 
+  almalinux9:
+    source: docker/Dockerfile.almalinux
+    args:
+      from: almalinux:9
+    output: rpm
+    matrix: ['x86_64', 'aarch64', 'ppc64le']
+    depend: >
+      ca-certificates
+      fontconfig
+      freetype
+      glibc
+      libjpeg
+      libpng
+      libstdc++
+      libX11
+      libXext
+      libXrender
+      openssl
+      xorg-x11-fonts-75dpi
+      xorg-x11-fonts-Type1
+      zlib
+
   centos8:
     source: docker/Dockerfile.centos
     args:
