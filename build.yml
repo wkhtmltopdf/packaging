@@ -180,10 +180,10 @@ docker-targets:
       xfonts-base
       zlib1g
 
-  centos8:
+  almalinux8:
     source: docker/Dockerfile.centos
     args:
-      from: centos:8
+      from: almalinux:8
     output: rpm
     matrix: ['x86_64', 'aarch64', 'ppc64le']
     depend: >
