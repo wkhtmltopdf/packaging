@@ -109,7 +109,7 @@ docker-targets:
       zlib1g
 
   focal:
-    source: docker/Dockerfile.focal
+    source: docker/Dockerfile.debian
     args:
       from: ubuntu:focal
       jpeg: libjpeg-turbo8-dev
