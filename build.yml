@@ -155,6 +155,30 @@ docker-targets:
       xfonts-base
       zlib1g
 
+  jammy:
+    source: docker/Dockerfile.debian
+    args:
+      from: ubuntu:bionic
+      jpeg: libjpeg-turbo8-dev
+    output: deb
+    matrix: ['amd64', 'i386', 'arm64', 'armhf', 'ppc64el']
+    depend: >
+      ca-certificates
+      fontconfig
+      libc6
+      libfreetype6
+      libjpeg-turbo8
+      libpng16-16
+      libssl3
+      libstdc++6
+      libx11-6
+      libxcb1
+      libxext6
+      libxrender1
+      xfonts-75dpi
+      xfonts-base
+      zlib1g
+
   focal:
     source: docker/Dockerfile.debian
     args:
