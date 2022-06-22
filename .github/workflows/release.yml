@@ -25,10 +25,13 @@ jobs:
           - almalinux9-aarch64
           - almalinux9-ppc64le
           - almalinux9-x86_64
+          - bionic-ppc64el
+          - buster-ppc64el
           - bullseye-amd64
           - bullseye-arm64
           - bullseye-i386
           - bullseye-ppc64el
+          - focal-ppc64el
           - jammy-amd64
           - jammy-arm64
           - jammy-i386
