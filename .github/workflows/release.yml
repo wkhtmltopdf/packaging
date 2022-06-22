@@ -22,6 +22,11 @@ jobs:
           - almalinux8-aarch64
           - almalinux8-ppc64le
           - almalinux8-x86_64
+          - bullseye-amd64
+          - bullseye-arm64
+          - bullseye-i386
+          - bullseye-ppc64el
+          - raspberrypi.bullseye-armhf
       fail-fast: false
     steps:
       - name: configure docker

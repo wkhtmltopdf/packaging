@@ -14,6 +14,29 @@ docker-prefix: "wkhtmltopdf/0.12:"
 #   qemu:           emulate via qemu-user-static image for specified platform
 #
 docker-targets:
+  bullseye:
+    source: docker/Dockerfile.debian
+    args:
+      from: debian:bullseye
+    output: deb
+    matrix: ['amd64', 'i386', 'arm64', 'armhf', 'armel', 'ppc64el']
+    depend: >
+      ca-certificates
+      fontconfig
+      libc6
+      libfreetype6
+      libjpeg62-turbo
+      libpng16-16
+      libssl1.1
+      libstdc++6
+      libx11-6
+      libxcb1
+      libxext6
+      libxrender1
+      xfonts-75dpi
+      xfonts-base
+      zlib1g
+
   buster:
     source: docker/Dockerfile.debian
     args:
@@ -43,6 +66,30 @@ docker-targets:
       from: debian:stretch
     output: deb
     matrix: ['amd64', 'i386', 'arm64', 'armhf', 'armel', 'ppc64el']
+    depend: >
+      ca-certificates
+      fontconfig
+      libc6
+      libfreetype6
+      libjpeg62-turbo
+      libpng16-16
+      libssl1.1
+      libstdc++6
+      libx11-6
+      libxcb1
+      libxext6
+      libxrender1
+      xfonts-75dpi
+      xfonts-base
+      zlib1g
+
+  raspberrypi.bullseye-armhf:
+    source: docker/Dockerfile.debian
+    args:
+      from: balenalib/rpi-raspbian:bullseye
+    output: deb
+    qemu:   linux/386 # see https://github.com/RPi-Distro/pi-gen/issues/271
+    arch:   armhf
     depend: >
       ca-certificates
       fontconfig
