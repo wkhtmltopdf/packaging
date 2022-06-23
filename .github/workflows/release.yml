@@ -34,7 +34,6 @@ jobs:
           - focal-ppc64el
           - jammy-amd64
           - jammy-arm64
-          - jammy-i386
           - jammy-ppc64el
           - raspberrypi.bullseye-armhf
       fail-fast: false
