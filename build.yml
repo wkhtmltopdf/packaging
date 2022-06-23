@@ -158,7 +158,7 @@ docker-targets:
   jammy:
     source: docker/Dockerfile.debian
     args:
-      from: ubuntu:bionic
+      from: ubuntu:jammy
       jpeg: libjpeg-turbo8-dev
     output: deb
     matrix: ['amd64', 'i386', 'arm64', 'armhf', 'ppc64el']
