@@ -2,6 +2,7 @@ ARG  from
 FROM ${from}
 
 ARG  jpeg=libjpeg-dev
+ARG  python_package=python
 ARG  ssl=libssl-dev
 ENV  CFLAGS=-w CXXFLAGS=-w
 
@@ -15,6 +16,6 @@ RUN apt-get update && apt-get install -y -q --no-install-recommends \
     libx11-dev \
     libxext-dev \
     libxrender-dev \
-    python \
+    $python_package \
     zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
