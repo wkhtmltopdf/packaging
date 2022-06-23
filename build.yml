@@ -255,7 +255,7 @@ docker-targets:
   almalinux9:
     source: docker/Dockerfile.centos
     args:
-      from: almalinux:8
+      from: almalinux:9
     output: rpm
     matrix: ['x86_64', 'aarch64', 'ppc64le']
     depend: >
