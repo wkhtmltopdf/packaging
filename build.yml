@@ -493,6 +493,19 @@ qt-config:
 # docker image which provides fpm
 fpm-image:      wkhtmltopdf/fpm:1.10.2-20200531
 
+# qemu-user-static -- allow overriding the setup for a specific target
+qemu-user-static:
+  default:
+    image: aptman/qus:d5.0 # chosen because it works with most builds
+    setup:
+      - "-- -r"
+      - "-s -- -p"
+  almalinux9-ppc64le:
+    image: aptman/qus:d6.1 # required for POWER 9 support used in image
+    setup:
+      - "-- -r"
+      - "-s -- -p"
+
 # mapping of distro architecture => docker platform
 matrix-platforms:
   # debian/ubuntu

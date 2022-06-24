@@ -59,9 +59,10 @@ def docker_images(config, targets, force):
         params = config['docker-targets'][name]
         needed_qemu = params.get('qemu')
         if needed_qemu and started_qemu != needed_qemu:
-            pull('aptman/qus:d5.0', needed_qemu)
-            shell('docker run --rm --privileged aptman/qus:d5.0 -- -r')
-            shell('docker run --rm --privileged aptman/qus:d5.0 -s -- -p')
+            qemu_config = config['qemu-user-static'][name in config['qemu-user-static'] and name or 'default']
+            pull(qemu_config['image'], needed_qemu)
+            for cmd in qemu_config['setup']:
+                shell('docker run --rm --privileged %s %s' % (qemu_config['image'], cmd))
             started_qemu = needed_qemu
 
         image = prefix+name
