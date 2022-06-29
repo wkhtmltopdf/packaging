@@ -346,12 +346,6 @@ vagrant-targets:
     qt_config:      macos-cocoa
     home_in_rsync:  /Users/vagrant
 
-  macos-carbon:
-    vm:             macos_lion
-    custom_build:   macos
-    qt_config:      macos-carbon
-    home_in_rsync:  /Users/vagrant
-
   msvc2015-win64:
     vm:             windows
     qt_config:      msvc
@@ -459,16 +453,6 @@ qt-config:
     -no-rpath
     -no-pch
     -xplatform win32-g++-4.6
-  macos-carbon: >
-    -silent
-    -reduce-exports
-    -no-framework
-    -no-dwarf2
-    -openssl-linked
-    -largefile
-    -no-rpath
-    -carbon
-    -platform unsupported/macx-clang
   macos-cocoa: >
     -silent
     -reduce-exports
