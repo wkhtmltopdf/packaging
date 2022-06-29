@@ -285,6 +285,28 @@ docker-targets:
       xorg-x11-fonts-Type1
       zlib
 
+  amazonlinux2022:
+    source: docker/Dockerfile.centos
+    args:
+      from: amazonlinux:2022
+    output: rpm
+    matrix: ['x86_64', 'aarch64']
+    depend: >
+      ca-certificates
+      fontconfig
+      freetype
+      glibc
+      libjpeg
+      libpng
+      libstdc++
+      libX11
+      libXext
+      libXrender
+      openssl
+      xorg-x11-fonts-75dpi
+      xorg-x11-fonts-Type1
+      zlib
+
   amazonlinux2_lambda:
     source: docker/Dockerfile.centos
     args:
