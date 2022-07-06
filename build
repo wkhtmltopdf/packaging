@@ -131,14 +131,16 @@ def compile_docker(config, target, src_dir, tgt_dir, debug=False):
     if os.path.exists(os.path.abspath(script)):
         dshell('/tgt/app', '/pkg/%s' % script)
 
-def package_docker(config, target, src_dir, iteration, clean=False):
+def package_docker(config, target, src_dir, iteration, clean=False, debug=False):
     tgt_dir = os.path.join('targets', target)
     if clean:
         shell('rm -fr %s' % tgt_dir)
 
-    compile_docker(config, target, src_dir, tgt_dir)
+    compile_docker(config, target, src_dir, tgt_dir, debug=debug)
 
     pkg_ver, pkg_iter = get_version(src_dir, iteration)
+    if debug:
+        pkg_iter += '.debug'
     output  = config['docker-targets'][target].get('output', 'tar')
     depend  = config['docker-targets'][target].get('depend', '')
 
@@ -302,6 +304,7 @@ def main():
     package.add_argument('target',  help='target to use for compilation')
     package.add_argument('src_dir', help='directory which has wkhtmltopdf source code')
     package.add_argument('--clean', action='store_true', default=False, help='perform clean build')
+    package.add_argument('--debug', action='store_true', default=False, help='compile in debug mode')
     package.add_argument('--iteration', default='1', help='iteration for release builds')
     package.set_defaults(func=package_docker)
 
