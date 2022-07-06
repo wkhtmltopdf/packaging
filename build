@@ -140,6 +140,8 @@ def package_docker(config, target, src_dir, iteration, clean=False, debug=False)
 
     pkg_ver, pkg_iter = get_version(src_dir, iteration)
     if debug:
+        pkg_iter += ".debug"
+    if debug:
         pkg_iter += '.debug'
     output  = config['docker-targets'][target].get('output', 'tar')
     depend  = config['docker-targets'][target].get('depend', '')
