@@ -1,4 +1,4 @@
-FROM ruby:2.6-slim-buster
+FROM ruby:2.7-slim-bullseye
 MAINTAINER Ashish Kulkarni <ashish@kulkarni.dev>
 
 RUN apt-get update && apt-get upgrade -y && \

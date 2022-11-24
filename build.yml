@@ -497,7 +497,7 @@ qt-config:
     -openssl-linked
 
 # docker image which provides fpm
-fpm-image:      wkhtmltopdf/fpm:1.10.2-20200531
+fpm-image:      wkhtmltopdf/fpm:1.10.2-20221124
 
 # qemu-user-static -- allow overriding the setup for a specific target
 qemu-user-static:
