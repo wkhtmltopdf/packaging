@@ -28,10 +28,11 @@ The software requirements on the build machine are:
   * for seamless foreign arch emulation via qemu-user-static
 * `vagrant` with `virtualbox` (for non-linux targets)
 
-On Ubuntu 20.04, this can be installed via a single command:
+These software requirements can be installed via a single command on Ubuntu:
 
-    sudo apt install -y python-yaml docker.io vagrant virtualbox p7zip-full
-
+*  20.04: `sudo apt install -y python-yaml docker.io vagrant virtualbox p7zip-full`
+*  22.04: `sudo apt install -y pyyaml docker.io vagrant virtualbox p7zip-full`
+*  
 If you're building for a non-default architecture, you may need to enable
 the `experimental: "true"` flag to enable `docker pull --platform`: see
 https://docs.docker.com/engine/reference/commandline/pull/#options
