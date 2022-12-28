@@ -247,6 +247,28 @@ docker-targets:
       xorg-x11-fonts-Type1
       zlib
 
+  fedora37:
+    source: docker/Dockerfile.centos
+    args:
+      from: fedora:37
+    output: rpm
+    matrix: ['x86_64', 'aarch64', 'ppc64le']
+    depend: >
+      ca-certificates
+      fontconfig
+      freetype
+      glibc
+      libjpeg
+      libpng
+      libstdc++
+      libX11
+      libXext
+      libXrender
+      openssl
+      xorg-x11-fonts-75dpi
+      xorg-x11-fonts-Type1
+      zlib
+
   archlinux:
     source: docker/Dockerfile.archlinux
     args:
