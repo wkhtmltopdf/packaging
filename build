@@ -163,7 +163,7 @@ def package_docker(config, target, src_dir, iteration, clean=False, debug=False)
         fdeb = '-t deb --deb-compression xz --provides wkhtmltopdf --conflicts wkhtmltopdf --replaces wkhtmltopdf --deb-shlibs "libwkhtmltox 0 wkhtmltox (>= 0.12.0)"'
         shell('docker run --rm -v%s:/tgt -w/tgt %s %s' % (os.path.abspath('targets'), fpm_args, fdeb))
     elif output in ('rpm', 'rpm:bzip2'):
-        frpm = '-t rpm --rpm-compression %s' % ('xz' if output == 'rpm' else 'bzip2')
+        frpm = '-t rpm --rpm-compression %s --rpm-digest sha256' % ('xz' if output == 'rpm' else 'bzip2')
         shell('docker run --rm -v%s:/tgt -w/tgt %s %s' % (os.path.abspath('targets'), fpm_args, frpm))
     elif output in ('pacman'):
         fpacman = '-t pacman'
