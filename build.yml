@@ -307,10 +307,10 @@ docker-targets:
       xorg-x11-fonts-Type1
       zlib
 
-  amazonlinux2022:
+  amazonlinux2023:
     source: docker/Dockerfile.centos
     args:
-      from: amazonlinux:2022
+      from: amazonlinux:2023
     output: rpm
     matrix: ['x86_64', 'aarch64']
     depend: >
