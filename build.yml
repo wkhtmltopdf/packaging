@@ -115,7 +115,7 @@ docker-targets:
       jpeg: libjpeg-turbo8-dev
       python: python3
     output: deb
-    matrix: ['amd64', 'arm64', 'armhf', 'ppc64el']
+    matrix: ['amd64', 'arm64', 'armhf', 'ppc64el', 's390x']
     depend: >
       ca-certificates
       fontconfig
@@ -543,6 +543,7 @@ matrix-platforms:
   armhf:   linux/arm/v7
   arm64:   linux/arm64/v8
   ppc64el: linux/ppc64le
+  s390x:   linux/s390x
   # centos
   x86_64:  linux/amd64
   i686:    linux/386
