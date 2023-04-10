@@ -16,6 +16,8 @@ jobs:
   strategy:
     matrix:
       # 64-bit x86
+      bookworm_amd64:
+        target: bookworm-amd64
       buster_amd64:
         target: buster-amd64
       focal_amd64:
@@ -50,6 +52,8 @@ jobs:
       # 64-bit ARM
       amazonlinux2_aarch64:
         target: amazonlinux2-aarch64
+      bookworkm_arm64:
+        target: bookworm-arm64
       bionic_arm64:
         target: bionic-arm64
       buster_arm64:

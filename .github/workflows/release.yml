@@ -26,6 +26,8 @@ jobs:
           - almalinux9-ppc64le
           - almalinux9-x86_64
           - bionic-ppc64el
+          - bookworm-amd64
+          - bookworm-arm64
           - buster-ppc64el
           - bullseye-amd64
           - bullseye-arm64
