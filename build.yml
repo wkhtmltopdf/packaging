@@ -60,6 +60,55 @@ docker-targets:
       xfonts-base
       zlib1g
 
+  bookworm:
+    source: docker/Dockerfile.debian
+    args:
+      from: debian:bookworm
+      python: python3
+    output: deb
+    matrix: ['amd64', 'i386', 'arm64', 'armhf', 'armel', 'ppc64el']
+    depend: >
+      ca-certificates
+      fontconfig
+      libc6
+      libfreetype6
+      libjpeg62-turbo
+      libpng16-16
+      libssl3
+      libstdc++6
+      libx11-6
+      libxcb1
+      libxext6
+      libxrender1
+      xfonts-75dpi
+      xfonts-base
+      zlib1g
+
+  raspberrypi.bookworm-armhf:
+    source: docker/Dockerfile.debian
+    args:
+      from: balenalib/rpi-raspbian:bookworm
+      python: python3
+    output: deb
+    qemu:   linux/386 # see https://github.com/RPi-Distro/pi-gen/issues/271
+    arch:   armhf
+    depend: >
+      ca-certificates
+      fontconfig
+      libc6
+      libfreetype6
+      libjpeg62-turbo
+      libpng16-16
+      libssl3
+      libstdc++6
+      libx11-6
+      libxcb1
+      libxext6
+      libxrender1
+      xfonts-75dpi
+      xfonts-base
+      zlib1g
+
   raspberrypi.bullseye-armhf:
     source: docker/Dockerfile.debian
     args:
