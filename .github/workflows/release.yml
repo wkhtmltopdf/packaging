@@ -28,6 +28,8 @@ jobs:
           - bionic-ppc64el
           - bookworm-amd64
           - bookworm-arm64
+          - bookworm-i386
+          - bookworm-ppc64el
           - buster-ppc64el
           - bullseye-amd64
           - bullseye-arm64
@@ -39,6 +41,7 @@ jobs:
           - jammy-amd64
           - jammy-arm64
           - jammy-ppc64el
+          - raspberrypi.bookworm-armhf
           - raspberrypi.bullseye-armhf
       fail-fast: false
     steps:
