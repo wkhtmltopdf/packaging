@@ -384,7 +384,7 @@ docker-targets:
       from: amazonlinux:2
     output: lambda_zip
     after_compile: amazonlinux2_lambda
-    arch: x86_64
+    matrix: ['x86_64', 'aarch64']
 
   opensuse.leap15:
     source: docker/Dockerfile.opensuse
